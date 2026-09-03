@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package ticket;
+
+service TicketService {
+  rpc SendTicket (ticket Request) returns (response Response) {}
+}
+
+message Request {
+  string ticketID = 1;
+  string userID = 2;
+  string body = 3;
+}
+
+message Response {
+  string value = 1;
+}
