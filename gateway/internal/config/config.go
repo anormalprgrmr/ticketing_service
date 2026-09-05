@@ -7,10 +7,25 @@ import (
 )
 
 type Config struct {
-	Port int
+	Port       int
+	RemoteHost string
+	RemotePort int
 }
 
 func NewConfig() *Config {
+	remoteHost := os.Getenv("TICKET-HOST")
+	if remoteHost == "" {
+		log.Fatal("host is required")
+	}
+
+	remotePort := os.Getenv("TICKET-PORT")
+	if remotePort == "" {
+		log.Fatal("remotePort is required")
+	}
+	remotePortInt, err := strconv.Atoi(remotePort)
+	if err != nil {
+		log.Fatal("wrong port number")
+	}
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -23,7 +38,11 @@ func NewConfig() *Config {
 		portInt = 8081
 	}
 
-	cfg := Config{Port: portInt}
+	cfg := Config{
+		Port:       portInt,
+		RemoteHost: remoteHost,
+		RemotePort: remotePortInt,
+	}
 
 	return &cfg
 }

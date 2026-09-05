@@ -4,9 +4,9 @@ services:
     container_name: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ticket
-      POSTGRES_USER: ticket
-      POSTGRES_PASSWORD: 12341234
+      POSTGRES_DB: ${POSTGRE_DB}
+      POSTGRES_USER: ${POSTGRE_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRE_PASSWORD}
     ports:
       - "5432:5432"
     volumes:
@@ -28,6 +28,8 @@ services:
         condition: service_healthy
     environment:
       PORT: ${GATEWAY_HTTP_PORT}
+      TICKET-HOST: ${TICKET_GRPC_HOST}
+      TICKET-PORT: ${TICKET_GRPC_PORT}
     ports:
       - "${GATEWAY_HTTP_PORT}:${GATEWAY_HTTP_PORT}"
 
@@ -35,7 +37,7 @@ services:
     build:
       context: ./ticket_service
       dockerfile: Dockerfile.yaml
-    container_name: ${POSTGRE_HOST}
+    container_name: ${TICKET_GRPC_HOST}
     restart: unless-stopped
     depends_on:
       postgres:
@@ -46,6 +48,7 @@ services:
       POSTGRES_DB: ${POSTGRE_DB}
       POSTGRES_USER: ${POSTGRE_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRE_PASSWORD}
+      PORT: ${TICKET_GRPC_PORT}
     ports:
       - "${TICKET_GRPC_PORT}:${TICKET_GRPC_PORT}"
 
