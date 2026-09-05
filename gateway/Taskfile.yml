@@ -15,4 +15,6 @@ tasks:
     desc: Start gateway server
     cmds :
     - go run cmd/main.go
-
+  proto:
+    desc: generate pb files
+    cmd: ./internal/protos/generate.sh

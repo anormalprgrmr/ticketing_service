@@ -2,19 +2,35 @@ package main
 
 import (
 	"fmt"
+	"gateway/internal/config"
+	pb "gateway/internal/protos"
+	"gateway/internal/routers"
 	"log"
 	"net/http"
-	"os"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"google.golang.org/grpc"
 )
 
 func main() {
 
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "8081"
-	}
+	config := config.NewConfig()
 
-	err := http.ListenAndServe(fmt.Sprintf(":%s", port), r)
+	conn, err := grpc.NewClient("localhost:8085")
+	if err != nil {
+	}
+	defer conn.Close()
+
+	client := pb.NewTicketServiceClient(conn)
+
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+
+	r.Mount("/api/v1/user", routers.NewUserRouter(client))
+	r.Mount("/api/v1/support", routers.NewSupportRouter(client))
+
+	err = http.ListenAndServe(fmt.Sprintf(":%d", config.Port), r)
 	if err != nil {
 		log.Fatalf("error starting gateway %v", err.Error())
 	}
