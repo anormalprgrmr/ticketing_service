@@ -16,7 +16,7 @@ import (
 func main() {
 
 	config := config.NewConfig()
-
+	log.Println("Starting App...")
 	conn, err := grpc.NewClient("localhost:8085")
 	if err != nil {
 	}
@@ -26,6 +26,10 @@ func main() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
+	log.Println("Starting HTTP server...")
+	r.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Pong"))
+	})
 
 	r.Mount("/api/v1/user", routers.NewUserRouter(client))
 	r.Mount("/api/v1/support", routers.NewSupportRouter(client))

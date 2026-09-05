@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package pb;
 
-option go_package = "gateway/internal/protos;pb";
+option go_package = "ticket_service/internal/protos;pb";
 
 service TicketService {
   rpc NewTicket (NewTicketRequest) returns (NewTicketResponse) {}

@@ -128,7 +128,7 @@ const file_contract_proto_rawDesc = "" +
 	"\x11NewTicketResponse\x12\x14\n" +
 	"\x05value\x18\x01 \x01(\tR\x05value2K\n" +
 	"\rTicketService\x12:\n" +
-	"\tNewTicket\x12\x14.pb.NewTicketRequest\x1a\x15.pb.NewTicketResponse\"\x00B\x1cZ\x1agateway/internal/protos;pbb\x06proto3"
+	"\tNewTicket\x12\x14.pb.NewTicketRequest\x1a\x15.pb.NewTicketResponse\"\x00B#Z!ticket_service/internal/protos;pbb\x06proto3"
 
 var (
 	file_contract_proto_rawDescOnce sync.Once

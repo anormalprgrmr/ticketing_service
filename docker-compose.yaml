@@ -1,1 +1,53 @@
 services:
+  postgres:
+    image: postgres:18
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ticket
+      POSTGRES_USER: ticket
+      POSTGRES_PASSWORD: 12341234
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ticket -d ticket"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile.yaml
+    container_name: gateway
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: ${GATEWAY_HTTP_PORT}
+    ports:
+      - "${GATEWAY_HTTP_PORT}:${GATEWAY_HTTP_PORT}"
+
+  ticket-service:
+    build:
+      context: ./ticket_service
+      dockerfile: Dockerfile.yaml
+    container_name: ${POSTGRE_HOST}
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: ${POSTGRE_HOST}
+      POSTGRES_PORT: ${POSTGRE_PORT}
+      POSTGRES_DB: ${POSTGRE_DB}
+      POSTGRES_USER: ${POSTGRE_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRE_PASSWORD}
+    ports:
+      - "${TICKET_GRPC_PORT}:${TICKET_GRPC_PORT}"
+
+volumes:
+  postgres_data:
