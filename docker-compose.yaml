@@ -4,7 +4,7 @@ services:
     container_name: postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${POSTGRE_DB}
+      POSTGRES_DB: ${POSTGRE_DBNAME}
       POSTGRES_USER: ${POSTGRE_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRE_PASSWORD}
     ports:
@@ -47,7 +47,7 @@ services:
     environment:
       POSTGRES_HOST: ${POSTGRE_HOST}
       POSTGRES_PORT: ${POSTGRE_PORT}
-      POSTGRES_DB: ${POSTGRE_DB}
+      POSTGRES_DB: ${POSTGRE_DBNAME}
       POSTGRES_USER: ${POSTGRE_USERNAME}
       POSTGRES_PASSWORD: ${POSTGRE_PASSWORD}
       PORT: ${TICKET_GRPC_PORT}

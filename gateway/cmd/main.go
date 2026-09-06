@@ -9,13 +9,18 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 
 func main() {
-	log := config.InitLogger()
+	err := config.InitLogger()
+	if err != nil {
+		log.Error("cant create logger instance :", err)
+	}
+
 	config := config.NewConfig()
-	log.Println("Starting App...")
+	log.Info("Starting App...")
 	conn, err := grpc.NewClient(fmt.Sprintf("%s:%d", config.RemoteHost, config.RemotePort), grpc.WithInsecure())
 	if err != nil {
 		log.Fatalf("cant connect to service :%v", err)

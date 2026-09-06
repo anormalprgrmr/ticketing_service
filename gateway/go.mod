@@ -9,6 +9,7 @@ require (
 )
 
 require (
+	github.com/lib/pq v1.12.3 // indirect
 	github.com/sirupsen/logrus v1.10.2 // indirect
 	golang.org/x/net v0.58.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
