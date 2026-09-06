@@ -20,12 +20,14 @@ services:
   gateway:
     build:
       context: ./gateway
-      dockerfile: Dockerfile.yaml
+      dockerfile: Dockerfile
     container_name: gateway
     restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
+      ticket-service:
+        condition: service_started
     environment:
       PORT: ${GATEWAY_HTTP_PORT}
       TICKET-HOST: ${TICKET_GRPC_HOST}
@@ -36,7 +38,7 @@ services:
   ticket-service:
     build:
       context: ./ticket_service
-      dockerfile: Dockerfile.yaml
+      dockerfile: Dockerfile
     container_name: ${TICKET_GRPC_HOST}
     restart: unless-stopped
     depends_on:

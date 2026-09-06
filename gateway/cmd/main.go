@@ -17,9 +17,9 @@ func main() {
 
 	config := config.NewConfig()
 	log.Println("Starting App...")
-	conn, err := grpc.NewClient(fmt.Sprintf("%s:%d", config.RemoteHost, config.RemotePort))
+	conn, err := grpc.NewClient(fmt.Sprintf("%s:%d", config.RemoteHost, config.RemotePort), grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("cant connect to service")
+		log.Fatalf("cant connect to service :%v", err)
 	}
 	defer conn.Close()
 

@@ -15,7 +15,7 @@ type Config struct {
 func NewConfig() *Config {
 	remoteHost := os.Getenv("TICKET-HOST")
 	if remoteHost == "" {
-		log.Fatal("host is required")
+		log.Fatal("TICKET-HOST is required")
 	}
 
 	remotePort := os.Getenv("TICKET-PORT")

@@ -1,13 +1,14 @@
 package handlers
 
 import (
-	"bytes"
 	"context"
-	"encoding/binary"
 	"encoding/json"
 	pb "gateway/internal/protos"
+	"log"
 	"net/http"
 	"time"
+
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 type UserHandler struct {
@@ -21,7 +22,7 @@ func NewUserHandler(grpcClient pb.TicketServiceClient) *UserHandler {
 }
 
 func (h *UserHandler) NewTicketHandler(w http.ResponseWriter, r *http.Request) {
-
+	log.Println("Start sending gRPC req")
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 
@@ -34,20 +35,22 @@ func (h *UserHandler) NewTicketHandler(w http.ResponseWriter, r *http.Request) {
 
 	res, err := h.grpcClient.NewTicket(ctx, &req)
 	if err != nil {
+		log.Printf("error while calling rpc: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		cancel()
 		return
 	}
 
-	var buf bytes.Buffer
+	log.Printf("response is => %v", res)
 
-	err = binary.Write(&buf, binary.BigEndian, res)
+	resByte, err := protojson.Marshal(res)
 	if err != nil {
+		log.Printf("error while converting proto to json : %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
 		cancel()
 		return
 	}
 
-	w.Write(buf.Bytes())
+	w.Write(resByte)
 
 }
