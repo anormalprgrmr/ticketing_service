@@ -3,8 +3,10 @@ module ticket_service
 go 1.27.1
 
 require (
+	github.com/sirupsen/logrus v1.10.2
 	google.golang.org/grpc v1.83.2
 	google.golang.org/protobuf v1.36.12
+	gopkg.in/natefinch/lumberjack.v2 v2.2.1
 )
 
 require (

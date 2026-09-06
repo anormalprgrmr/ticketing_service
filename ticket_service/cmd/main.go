@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"net"
 	"ticket_service/config"
 	pb "ticket_service/internal/protos"
@@ -22,6 +21,9 @@ func (s *TicketServer) NewTicket(ctx context.Context, in *pb.NewTicketRequest) (
 }
 
 func main() {
+
+	log := config.InitLogger()
+
 	config := config.NewConfig()
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", config.Port))

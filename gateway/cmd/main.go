@@ -5,7 +5,6 @@ import (
 	"gateway/internal/config"
 	pb "gateway/internal/protos"
 	"gateway/internal/routers"
-	"log"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -14,7 +13,7 @@ import (
 )
 
 func main() {
-
+	log := config.InitLogger()
 	config := config.NewConfig()
 	log.Println("Starting App...")
 	conn, err := grpc.NewClient(fmt.Sprintf("%s:%d", config.RemoteHost, config.RemotePort), grpc.WithInsecure())
