@@ -9,10 +9,10 @@ const (
 )
 
 type Ticket struct {
-	ID        string       `json:"id"`
-	UserID    string       `json:"user_id"`
-	SupportID string       `json:"support_id"`
-	Body      string       `json:"body"`
-	Responses []string     `json:"responses"`
-	Status    TicketStatus `json:"status"`
+	ID        string       `db:"id"`
+	UserID    string       `db:"user_id"`
+	SupportID string       `db:"support_id"`
+	Body      string       `db:"body"`
+	Responses []string     `db:"responses"`
+	Status    TicketStatus `db:"status"`
 }
