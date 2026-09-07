@@ -1,0 +1,1 @@
+ALTER TABLE supports DROP COLUMN name CASCADE;

@@ -36,3 +36,6 @@ tasks:
       - |
         read -p "DB URI: " DB_URI
         migrate -source file:/home/a-ammarloo/projects/assesment/ticket_service/internal/db/migrations -database "$DB_URI" down
+  proto:
+    desc: generate pb files
+    cmd: ./internal/protos/generate.sh
