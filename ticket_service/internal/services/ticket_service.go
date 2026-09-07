@@ -1,6 +1,9 @@
 package services
 
-import "ticket_service/internal/repositories"
+import (
+	"context"
+	"ticket_service/internal/repositories"
+)
 
 type TicketService struct {
 	ticketRepo *repositories.TicketRepo
@@ -12,9 +15,9 @@ func NewTicketService(ticketRepo *repositories.TicketRepo) *TicketService {
 	}
 }
 
-func (s *TicketService) CreateTicket(name string) error {
+func (s *TicketService) CreateTicket(ctx context.Context, userID string, body string) (ticketID string, err error) {
 
-	s.ticketRepo.NewTicket("sad", "ss")
+	ticket, err := s.ticketRepo.NewTicket(ctx, userID, body)
 
-	return nil
+	return ticket.ID, err
 }

@@ -18,18 +18,23 @@ type TicketServer struct {
 	dbConn *sql.DB
 	*handlers.TicketHandler
 	*handlers.UserHandler
+	*handlers.SupportHandler
+	pb.UnsafeTicketServiceServer
 }
 
 func StartgRPCServer(port int, dbConn *sqlx.DB) error {
 
 	ticketRepo := repositories.NewTicketRepo(dbConn)
 	userRepo := repositories.NewUserRepo(dbConn)
+	supportRepo := repositories.NewSupportRepo(dbConn)
 
 	ticketService := services.NewTicketService(ticketRepo)
 	userService := services.NewUserService(userRepo)
+	supportService := services.NewSupportService(supportRepo)
 
 	ticketHandler := handlers.NewTicketHandler(ticketService)
 	userHandler := handlers.NewUserHandler(userService)
+	supportHandler := handlers.NewSupportHandler(supportService)
 
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
@@ -38,8 +43,9 @@ func StartgRPCServer(port int, dbConn *sqlx.DB) error {
 
 	server := grpc.NewServer()
 	pb.RegisterTicketServiceServer(server, &TicketServer{
-		TicketHandler: ticketHandler,
-		UserHandler:   userHandler,
+		TicketHandler:  ticketHandler,
+		UserHandler:    userHandler,
+		SupportHandler: supportHandler,
 	})
 
 	log.Info("Starting gRPC server ...")

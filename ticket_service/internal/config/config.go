@@ -4,9 +4,12 @@ import (
 	"log"
 	"os"
 	"strconv"
+
+	"github.com/sirupsen/logrus"
 )
 
 type Config struct {
+	LogLevel   logrus.Level
 	Port       int
 	DBHost     string
 	DBPort     int
@@ -16,6 +19,13 @@ type Config struct {
 }
 
 func NewConfig() *Config {
+
+	logLevelStr := os.Getenv("LOG_LEVEL")
+	logLevel, err := logrus.ParseLevel(logLevelStr)
+	if err != nil {
+		logLevel = logrus.DebugLevel
+	}
+
 	port := os.Getenv("PORT")
 	portInt, err := strconv.Atoi(port)
 	if err != nil {
@@ -54,5 +64,6 @@ func NewConfig() *Config {
 		DBUser:     dbUser,
 		DBPassword: dbPassword,
 		DBHost:     dbHost,
+		LogLevel:   logLevel,
 	}
 }

@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"context"
 	"ticket_service/internal/models"
 
 	"github.com/jmoiron/sqlx"
@@ -16,9 +17,11 @@ func NewTicketRepo(dbConn *sqlx.DB) *TicketRepo {
 	}
 }
 
-func (r *TicketRepo) NewTicket(userID, body string) error {
-	r.dbConn.Query("INSERT INTO tickets VALUES ($1)")
-	return nil
+func (r *TicketRepo) NewTicket(ctx context.Context, userID, body string) (*models.Ticket, error) {
+	var ticket models.Ticket
+	r.dbConn.GetContext(ctx, &ticket, "INSERT INTO tickets(user_id,body) VALUES ($1,$2)", userID, body)
+
+	return &ticket, nil
 }
 
 func (r *TicketRepo) GetTicketByID(userID, ticketID string) (*models.Ticket, error) {

@@ -1,6 +1,9 @@
 package services
 
-import "ticket_service/internal/repositories"
+import (
+	"context"
+	"ticket_service/internal/repositories"
+)
 
 type SupportService struct {
 	supportRepo *repositories.SupportRepo
@@ -12,9 +15,9 @@ func NewSupportService(supportRepo *repositories.SupportRepo) *SupportService {
 	}
 }
 
-func (s *SupportService) CreateSupport(name string) error {
+func (s *SupportService) CreateSupport(ctx context.Context, name string) (supportID string, err error) {
 
-	s.supportRepo.CreateSupport(name)
+	supportID, err = s.supportRepo.CreateSupport(ctx, name)
 
-	return nil
+	return supportID, err
 }

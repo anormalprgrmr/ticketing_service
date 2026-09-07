@@ -5,11 +5,12 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-func InitLogger() error {
+func InitLogger(logLevel logrus.Level) error {
 	logDir := "/tmp/newcash/gateway"
 
 	if err := os.MkdirAll(logDir, 0755); err != nil {
@@ -30,6 +31,7 @@ func InitLogger() error {
 		FullTimestamp: true,
 	})
 
+	log.SetLevel(logLevel)
 	log.Info("logger initialized successfully")
 
 	return nil

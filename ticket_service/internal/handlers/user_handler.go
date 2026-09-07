@@ -18,7 +18,7 @@ func NewUserHandler(userService *services.UserService) *UserHandler {
 
 func (h *UserHandler) NewUser(ctx context.Context, in *pb.NewUserRequest) (*pb.NewUserResponse, error) {
 
-	userID, err := h.userService.CreateUser(in.Name)
+	userID, err := h.userService.CreateUser(ctx, in.Name)
 	if err != nil {
 		return &pb.NewUserResponse{
 			Success: false,

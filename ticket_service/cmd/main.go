@@ -8,16 +8,15 @@ import (
 )
 
 func main() {
+	cfg := config.NewConfig()
 
-	err := config.InitLogger()
+	err := config.InitLogger(cfg.LogLevel)
 	if err != nil {
 		log.Fatalf("cant init logger : %e", err)
 	}
 
-	config := config.NewConfig()
+	dbConn := db.ConnectDB(cfg.DBHost, cfg.DBPort, cfg.DBUser, cfg.DBPassword, cfg.DBName)
 
-	dbConn := db.ConnectDB(config.DBHost, config.DBPort, config.DBUser, config.DBPassword, config.DBName)
-
-	err = grpcserver.StartgRPCServer(config.Port, dbConn)
+	err = grpcserver.StartgRPCServer(cfg.Port, dbConn)
 
 }

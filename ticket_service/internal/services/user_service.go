@@ -1,6 +1,9 @@
 package services
 
-import "ticket_service/internal/repositories"
+import (
+	"context"
+	"ticket_service/internal/repositories"
+)
 
 type UserService struct {
 	userRepo *repositories.UserRepo
@@ -12,9 +15,9 @@ func NewUserService(userRepo *repositories.UserRepo) *UserService {
 	}
 }
 
-func (s *UserService) CreateUser(name string) (userID string, err error) {
+func (s *UserService) CreateUser(ctx context.Context, name string) (userID string, err error) {
 
-	user, err := s.userRepo.CreateUser(name)
+	user, err := s.userRepo.CreateUser(ctx, name)
 	if err != nil {
 		return "", err
 	}
