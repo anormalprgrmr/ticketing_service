@@ -1,1 +1,3 @@
 DROP TABLE IF EXISTS tickets;
+
+DROP EXTENSION IF EXISTS "uuid-ossp";

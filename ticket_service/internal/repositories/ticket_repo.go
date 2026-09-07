@@ -12,4 +12,5 @@ func NewTicketRepo(dbConn *sql.DB) *TicketRepo {
 
 func (r *TicketRepo) NewTicket(userID, body string) error {
 	r.dbConn.Query("INSERT INTO tickets VALUES ($1)")
+	return nil
 }

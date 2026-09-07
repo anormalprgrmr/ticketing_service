@@ -1,0 +1,11 @@
+ALTER TABLE tickets
+DROP CONSTRAINT IF EXISTS fk_ticket_support;
+
+ALTER TABLE tickets
+DROP CONSTRAINT IF EXISTS fk_ticket_user;
+
+ALTER TABLE tickets
+DROP COLUMN IF EXISTS support_id;
+
+ALTER TABLE tickets
+DROP COLUMN IF EXISTS user_id;

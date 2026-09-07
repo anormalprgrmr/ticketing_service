@@ -1,0 +1,38 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+
+version: '3'
+
+vars:
+  GREETING: Hello, world!
+
+tasks:
+  default:
+    desc: Print a greeting message
+    cmds:
+      - echo "{{.GREETING}}"
+    silent: true
+  migNew:
+    desc: Create a new migration
+    silent: true
+    cmds:
+      - |
+        read -p "Migration name: " MESSAGE
+        migrate create \
+          -ext sql \
+          -dir internal/db/migrations \
+          -seq \
+          "$MESSAGE"
+  migUp:
+    desc: run migrations upward
+    silent: true
+    cmds:
+      - |
+        read -p "DB URI: " DB_URI
+        migrate -source file:/home/a-ammarloo/projects/assesment/ticket_service/internal/db/migrations -database "$DB_URI" up
+  migDown:
+    desc: run migrations downward
+    silent: true
+    cmds:
+      - |
+        read -p "DB URI: " DB_URI
+        migrate -source file:/home/a-ammarloo/projects/assesment/ticket_service/internal/db/migrations -database "$DB_URI" down
