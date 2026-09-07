@@ -19,7 +19,7 @@ func NewUserRepo(dbConn *sqlx.DB) *UserRepo {
 
 func (r *UserRepo) CreateUser(ctx context.Context, name string) (*models.User, error) {
 	var user models.User
-	err := r.dbConn.GetContext(ctx, &user, "INSERT INTO users (name) VALUES ($1)", name)
+	err := r.dbConn.GetContext(ctx, &user, "INSERT INTO users (name) VALUES ($1) RETURNING *", name)
 	if err != nil {
 		return nil, err
 	}

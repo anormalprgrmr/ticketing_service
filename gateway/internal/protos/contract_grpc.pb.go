@@ -19,7 +19,9 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TicketService_NewTicket_FullMethodName = "/pb.TicketService/NewTicket"
+	TicketService_NewTicket_FullMethodName  = "/pb.TicketService/NewTicket"
+	TicketService_NewUser_FullMethodName    = "/pb.TicketService/NewUser"
+	TicketService_NewSupport_FullMethodName = "/pb.TicketService/NewSupport"
 )
 
 // TicketServiceClient is the client API for TicketService service.
@@ -27,6 +29,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TicketServiceClient interface {
 	NewTicket(ctx context.Context, in *NewTicketRequest, opts ...grpc.CallOption) (*NewTicketResponse, error)
+	NewUser(ctx context.Context, in *NewUserRequest, opts ...grpc.CallOption) (*NewUserResponse, error)
+	NewSupport(ctx context.Context, in *NewSupportRequest, opts ...grpc.CallOption) (*NewSupportResponse, error)
 }
 
 type ticketServiceClient struct {
@@ -47,11 +51,33 @@ func (c *ticketServiceClient) NewTicket(ctx context.Context, in *NewTicketReques
 	return out, nil
 }
 
+func (c *ticketServiceClient) NewUser(ctx context.Context, in *NewUserRequest, opts ...grpc.CallOption) (*NewUserResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(NewUserResponse)
+	err := c.cc.Invoke(ctx, TicketService_NewUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *ticketServiceClient) NewSupport(ctx context.Context, in *NewSupportRequest, opts ...grpc.CallOption) (*NewSupportResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(NewSupportResponse)
+	err := c.cc.Invoke(ctx, TicketService_NewSupport_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // TicketServiceServer is the server API for TicketService service.
 // All implementations must embed UnimplementedTicketServiceServer
 // for forward compatibility.
 type TicketServiceServer interface {
 	NewTicket(context.Context, *NewTicketRequest) (*NewTicketResponse, error)
+	NewUser(context.Context, *NewUserRequest) (*NewUserResponse, error)
+	NewSupport(context.Context, *NewSupportRequest) (*NewSupportResponse, error)
 	mustEmbedUnimplementedTicketServiceServer()
 }
 
@@ -64,6 +90,12 @@ type UnimplementedTicketServiceServer struct{}
 
 func (UnimplementedTicketServiceServer) NewTicket(context.Context, *NewTicketRequest) (*NewTicketResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method NewTicket not implemented")
+}
+func (UnimplementedTicketServiceServer) NewUser(context.Context, *NewUserRequest) (*NewUserResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method NewUser not implemented")
+}
+func (UnimplementedTicketServiceServer) NewSupport(context.Context, *NewSupportRequest) (*NewSupportResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method NewSupport not implemented")
 }
 func (UnimplementedTicketServiceServer) mustEmbedUnimplementedTicketServiceServer() {}
 func (UnimplementedTicketServiceServer) testEmbeddedByValue()                       {}
@@ -104,6 +136,42 @@ func _TicketService_NewTicket_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _TicketService_NewUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NewUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TicketServiceServer).NewUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TicketService_NewUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TicketServiceServer).NewUser(ctx, req.(*NewUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TicketService_NewSupport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(NewSupportRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TicketServiceServer).NewSupport(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TicketService_NewSupport_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TicketServiceServer).NewSupport(ctx, req.(*NewSupportRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // TicketService_ServiceDesc is the grpc.ServiceDesc for TicketService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +182,14 @@ var TicketService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "NewTicket",
 			Handler:    _TicketService_NewTicket_Handler,
+		},
+		{
+			MethodName: "NewUser",
+			Handler:    _TicketService_NewUser_Handler,
+		},
+		{
+			MethodName: "NewSupport",
+			Handler:    _TicketService_NewSupport_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

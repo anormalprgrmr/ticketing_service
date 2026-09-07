@@ -2,10 +2,12 @@ syntax = "proto3";
 
 package pb;
 
-option go_package = "gateway/internal/protos;pb";
+option go_package = "ticket_service/internal/protos;pb";
 
 service TicketService {
   rpc NewTicket (NewTicketRequest) returns (NewTicketResponse) {}
+  rpc NewUser (NewUserRequest) returns (NewUserResponse) {}
+  rpc NewSupport (NewSupportRequest) returns (NewSupportResponse) {}
 }
 
 message NewTicketRequest {
@@ -14,5 +16,27 @@ message NewTicketRequest {
 }
 
 message NewTicketResponse {
-  string value = 1;
+  bool success = 1;
+  string error = 2;
+  string ticketID = 3;
+}
+
+message NewUserRequest {
+  string name = 1;
+}
+
+message NewUserResponse {
+  bool success = 1;
+  string error = 2;
+  string userID = 3;
+}
+
+message NewSupportRequest {
+  string name = 1;
+}
+
+message NewSupportResponse {
+  bool success = 1;
+  string error = 2;
+  string supportID = 3;
 }

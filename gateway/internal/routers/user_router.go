@@ -2,17 +2,15 @@ package routers
 
 import (
 	"gateway/internal/handlers"
-	pb "gateway/internal/protos"
 
 	"github.com/go-chi/chi/v5"
 )
 
-func NewUserRouter(client pb.TicketServiceClient) *chi.Mux {
-
-	handler := handlers.NewUserHandler(client)
+func NewUserRouter(userHandler *handlers.UserHandler) *chi.Mux {
 
 	r := chi.NewRouter()
-	r.Post("/newTicket", handler.NewTicketHandler)
+	r.Post("/newUser", userHandler.NewUser)
+	r.Post("/newTicket", userHandler.NewTicket)
 
 	return r
 }

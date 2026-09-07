@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"gateway/internal/config"
+	"gateway/internal/handlers"
 	pb "gateway/internal/protos"
 	"gateway/internal/routers"
 	"net/http"
@@ -29,6 +30,10 @@ func main() {
 
 	client := pb.NewTicketServiceClient(conn)
 
+	userHandler := handlers.NewUserHandler(client)
+	supportHandler := handlers.NewSupportHandler(client)
+	adminHandler := handlers.NewAdminHandler(client)
+
 	r := chi.NewRouter()
 	r.Use(middleware.Logger)
 	log.Println("Starting HTTP server...")
@@ -36,8 +41,9 @@ func main() {
 		w.Write([]byte("Pong"))
 	})
 
-	r.Mount("/api/v1/user", routers.NewUserRouter(client))
-	r.Mount("/api/v1/support", routers.NewSupportRouter(client))
+	r.Mount("/api/user", routers.NewUserRouter(userHandler))
+	r.Mount("/api/support", routers.NewSupportRouter(supportHandler))
+	r.Mount("/api/admin", routers.NewAdminRouter(adminHandler))
 
 	err = http.ListenAndServe(fmt.Sprintf(":%d", config.Port), r)
 	if err != nil {
