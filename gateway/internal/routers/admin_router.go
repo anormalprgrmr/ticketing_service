@@ -10,8 +10,9 @@ func NewAdminRouter(adminHandler *handlers.AdminHandler) *chi.Mux {
 
 	r := chi.NewRouter()
 	r.Post("/newSupport", adminHandler.NewSupport)
-	// r.Post("/closeTicket", handlers.EchoHandler)
-	// r.Post("/transferTicket", handlers.EchoHandler)
+	r.Post("/transferTicket", adminHandler.TransferTicket)
+
+	r.Get("/getTicket", adminHandler.GetTicketsWithStatus)
 
 	return r
 }

@@ -13,7 +13,7 @@ service TicketService {
   rpc GetSupportTickets(GetSupportTicketsRequest) returns (GetSupportTicketsResponse) {}
   rpc GetTicketsWithStatus(GetTicketsWithStatusRequest) returns (GetTicketsWithStatusResponse) {}
 
-  rpc ChangeTicketStatus(ChangeTicketStatusRequest) returns (ChangeTicketStatusResponse) {}
+  rpc CloseTicket(CloseTicketRequest) returns (CloseTicketResponse) {}
   rpc AnswerTicket(AnswerTicketRequest) returns (AnswerTicketResponse) {}
   rpc TransferTicket(TransferTicketRequest) returns (TransferTicketResponse) {}
 }
@@ -70,7 +70,7 @@ message GetSupportTicketsResponse {
 }
 
 message GetTicketsWithStatusRequest {
-  string name = 1;
+  TicketStatus status = 1;
 }
 
 message GetTicketsWithStatusResponse {
@@ -79,12 +79,11 @@ message GetTicketsWithStatusResponse {
   repeated Ticket tickets = 3;
 }
 
-message ChangeTicketStatusRequest {
+message CloseTicketRequest {
   string ticket_id = 1;
-  TicketStatus status = 2;
 }
 
-message ChangeTicketStatusResponse {
+message CloseTicketResponse {
   bool success = 1;
   string error = 2;
 }

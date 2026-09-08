@@ -25,3 +25,4 @@ func (s *TicketService) CreateTicket(ctx context.Context, userID string, body st
 
 	return ticket.ID, err
 }
+

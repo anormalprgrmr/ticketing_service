@@ -10,8 +10,10 @@ func NewSupportRouter(supportHandler *handlers.SupportHandler) *chi.Mux {
 
 	r := chi.NewRouter()
 	r.Post("/answerTicket", supportHandler.NewSupport)
-	// r.Post("/closeTicket", handlers.EchoHandler)
-	// r.Post("/transferTicket", handlers.EchoHandler)
+	r.Post("/closeTicket", supportHandler.CloseTicket)
+	r.Post("/answerTicket", supportHandler.AnswerTicket)
+
+	r.Get("/{userID}/myTickets", supportHandler.GetSupportTickets)
 
 	return r
 }

@@ -34,3 +34,4 @@ func (h *TicketHandler) NewTicket(ctx context.Context, in *pb.NewTicketRequest) 
 		TicketId: ticketID.String(),
 	}, nil
 }
+

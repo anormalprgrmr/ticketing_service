@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"ticket_service/internal/handlers/transformers"
 	pb "ticket_service/internal/protos"
 	"ticket_service/internal/services"
 )
@@ -31,5 +32,23 @@ func (h *UserHandler) NewUser(ctx context.Context, in *pb.NewUserRequest) (*pb.N
 		Success: true,
 		Error:   "",
 		UserId:  userID.String(),
+	}, nil
+}
+
+func (h *UserHandler) GetUserTickets(ctx context.Context, in *pb.GetUserTicketsRequest) (*pb.GetUserTicketsResponse, error) {
+
+	tickets, err := h.userService.GetUserTickets(ctx, in.UserId)
+	if err != nil {
+		return &pb.GetUserTicketsResponse{
+			Success: false,
+			Error:   err.Error(),
+			Tickets: nil,
+		}, err
+	}
+
+	return &pb.GetUserTicketsResponse{
+		Success: true,
+		Error:   "",
+		Tickets: transformers.TicketModelToGRPC(tickets),
 	}, nil
 }

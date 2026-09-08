@@ -603,7 +603,7 @@ func (x *GetSupportTicketsResponse) GetTickets() []*Ticket {
 
 type GetTicketsWithStatusRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Status        TicketStatus           `protobuf:"varint,1,opt,name=status,proto3,enum=pb.TicketStatus" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -638,11 +638,11 @@ func (*GetTicketsWithStatusRequest) Descriptor() ([]byte, []int) {
 	return file_contract_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *GetTicketsWithStatusRequest) GetName() string {
+func (x *GetTicketsWithStatusRequest) GetStatus() TicketStatus {
 	if x != nil {
-		return x.Name
+		return x.Status
 	}
-	return ""
+	return TicketStatus_TICKET_STATUS_UNSPECIFIED
 }
 
 type GetTicketsWithStatusResponse struct {
@@ -705,28 +705,27 @@ func (x *GetTicketsWithStatusResponse) GetTickets() []*Ticket {
 	return nil
 }
 
-type ChangeTicketStatusRequest struct {
+type CloseTicketRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TicketId      string                 `protobuf:"bytes,1,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
-	Status        TicketStatus           `protobuf:"varint,2,opt,name=status,proto3,enum=pb.TicketStatus" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ChangeTicketStatusRequest) Reset() {
-	*x = ChangeTicketStatusRequest{}
+func (x *CloseTicketRequest) Reset() {
+	*x = CloseTicketRequest{}
 	mi := &file_contract_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ChangeTicketStatusRequest) String() string {
+func (x *CloseTicketRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ChangeTicketStatusRequest) ProtoMessage() {}
+func (*CloseTicketRequest) ProtoMessage() {}
 
-func (x *ChangeTicketStatusRequest) ProtoReflect() protoreflect.Message {
+func (x *CloseTicketRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_contract_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -738,26 +737,19 @@ func (x *ChangeTicketStatusRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ChangeTicketStatusRequest.ProtoReflect.Descriptor instead.
-func (*ChangeTicketStatusRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use CloseTicketRequest.ProtoReflect.Descriptor instead.
+func (*CloseTicketRequest) Descriptor() ([]byte, []int) {
 	return file_contract_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *ChangeTicketStatusRequest) GetTicketId() string {
+func (x *CloseTicketRequest) GetTicketId() string {
 	if x != nil {
 		return x.TicketId
 	}
 	return ""
 }
 
-func (x *ChangeTicketStatusRequest) GetStatus() TicketStatus {
-	if x != nil {
-		return x.Status
-	}
-	return TicketStatus_TICKET_STATUS_UNSPECIFIED
-}
-
-type ChangeTicketStatusResponse struct {
+type CloseTicketResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
@@ -765,20 +757,20 @@ type ChangeTicketStatusResponse struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ChangeTicketStatusResponse) Reset() {
-	*x = ChangeTicketStatusResponse{}
+func (x *CloseTicketResponse) Reset() {
+	*x = CloseTicketResponse{}
 	mi := &file_contract_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ChangeTicketStatusResponse) String() string {
+func (x *CloseTicketResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ChangeTicketStatusResponse) ProtoMessage() {}
+func (*CloseTicketResponse) ProtoMessage() {}
 
-func (x *ChangeTicketStatusResponse) ProtoReflect() protoreflect.Message {
+func (x *CloseTicketResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_contract_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -790,19 +782,19 @@ func (x *ChangeTicketStatusResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ChangeTicketStatusResponse.ProtoReflect.Descriptor instead.
-func (*ChangeTicketStatusResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use CloseTicketResponse.ProtoReflect.Descriptor instead.
+func (*CloseTicketResponse) Descriptor() ([]byte, []int) {
 	return file_contract_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *ChangeTicketStatusResponse) GetSuccess() bool {
+func (x *CloseTicketResponse) GetSuccess() bool {
 	if x != nil {
 		return x.Success
 	}
 	return false
 }
 
-func (x *ChangeTicketStatusResponse) GetError() string {
+func (x *CloseTicketResponse) GetError() string {
 	if x != nil {
 		return x.Error
 	}
@@ -1140,18 +1132,17 @@ const file_contract_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05error\x18\x02 \x01(\tR\x05error\x12$\n" +
 	"\atickets\x18\x03 \x03(\v2\n" +
-	".pb.TicketR\atickets\"1\n" +
-	"\x1bGetTicketsWithStatusRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"t\n" +
+	".pb.TicketR\atickets\"G\n" +
+	"\x1bGetTicketsWithStatusRequest\x12(\n" +
+	"\x06status\x18\x01 \x01(\x0e2\x10.pb.TicketStatusR\x06status\"t\n" +
 	"\x1cGetTicketsWithStatusResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05error\x18\x02 \x01(\tR\x05error\x12$\n" +
 	"\atickets\x18\x03 \x03(\v2\n" +
-	".pb.TicketR\atickets\"b\n" +
-	"\x19ChangeTicketStatusRequest\x12\x1b\n" +
-	"\tticket_id\x18\x01 \x01(\tR\bticketId\x12(\n" +
-	"\x06status\x18\x02 \x01(\x0e2\x10.pb.TicketStatusR\x06status\"L\n" +
-	"\x1aChangeTicketStatusResponse\x12\x18\n" +
+	".pb.TicketR\atickets\"1\n" +
+	"\x12CloseTicketRequest\x12\x1b\n" +
+	"\tticket_id\x18\x01 \x01(\tR\bticketId\"E\n" +
+	"\x13CloseTicketResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05error\x18\x02 \x01(\tR\x05error\"e\n" +
 	"\x13AnswerTicketRequest\x12\x1d\n" +
@@ -1180,7 +1171,7 @@ const file_contract_proto_rawDesc = "" +
 	"\x19TICKET_STATUS_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12TICKET_STATUS_OPEN\x10\x01\x12\x1a\n" +
 	"\x16TICKET_STATUS_ANSWERED\x10\x02\x12\x18\n" +
-	"\x14TICKET_STATUS_CLOSED\x10\x032\xa3\x05\n" +
+	"\x14TICKET_STATUS_CLOSED\x10\x032\x8e\x05\n" +
 	"\rTicketService\x12:\n" +
 	"\tNewTicket\x12\x14.pb.NewTicketRequest\x1a\x15.pb.NewTicketResponse\"\x00\x124\n" +
 	"\aNewUser\x12\x12.pb.NewUserRequest\x1a\x13.pb.NewUserResponse\"\x00\x12=\n" +
@@ -1188,8 +1179,8 @@ const file_contract_proto_rawDesc = "" +
 	"NewSupport\x12\x15.pb.NewSupportRequest\x1a\x16.pb.NewSupportResponse\"\x00\x12I\n" +
 	"\x0eGetUserTickets\x12\x19.pb.GetUserTicketsRequest\x1a\x1a.pb.GetUserTicketsResponse\"\x00\x12R\n" +
 	"\x11GetSupportTickets\x12\x1c.pb.GetSupportTicketsRequest\x1a\x1d.pb.GetSupportTicketsResponse\"\x00\x12[\n" +
-	"\x14GetTicketsWithStatus\x12\x1f.pb.GetTicketsWithStatusRequest\x1a .pb.GetTicketsWithStatusResponse\"\x00\x12U\n" +
-	"\x12ChangeTicketStatus\x12\x1d.pb.ChangeTicketStatusRequest\x1a\x1e.pb.ChangeTicketStatusResponse\"\x00\x12C\n" +
+	"\x14GetTicketsWithStatus\x12\x1f.pb.GetTicketsWithStatusRequest\x1a .pb.GetTicketsWithStatusResponse\"\x00\x12@\n" +
+	"\vCloseTicket\x12\x16.pb.CloseTicketRequest\x1a\x17.pb.CloseTicketResponse\"\x00\x12C\n" +
 	"\fAnswerTicket\x12\x17.pb.AnswerTicketRequest\x1a\x18.pb.AnswerTicketResponse\"\x00\x12I\n" +
 	"\x0eTransferTicket\x12\x19.pb.TransferTicketRequest\x1a\x1a.pb.TransferTicketResponse\"\x00B#Z!ticket_service/internal/protos;pbb\x06proto3"
 
@@ -1221,8 +1212,8 @@ var file_contract_proto_goTypes = []any{
 	(*GetSupportTicketsResponse)(nil),    // 10: pb.GetSupportTicketsResponse
 	(*GetTicketsWithStatusRequest)(nil),  // 11: pb.GetTicketsWithStatusRequest
 	(*GetTicketsWithStatusResponse)(nil), // 12: pb.GetTicketsWithStatusResponse
-	(*ChangeTicketStatusRequest)(nil),    // 13: pb.ChangeTicketStatusRequest
-	(*ChangeTicketStatusResponse)(nil),   // 14: pb.ChangeTicketStatusResponse
+	(*CloseTicketRequest)(nil),           // 13: pb.CloseTicketRequest
+	(*CloseTicketResponse)(nil),          // 14: pb.CloseTicketResponse
 	(*AnswerTicketRequest)(nil),          // 15: pb.AnswerTicketRequest
 	(*AnswerTicketResponse)(nil),         // 16: pb.AnswerTicketResponse
 	(*TransferTicketRequest)(nil),        // 17: pb.TransferTicketRequest
@@ -1232,8 +1223,8 @@ var file_contract_proto_goTypes = []any{
 var file_contract_proto_depIdxs = []int32{
 	19, // 0: pb.GetUserTicketsResponse.tickets:type_name -> pb.Ticket
 	19, // 1: pb.GetSupportTicketsResponse.tickets:type_name -> pb.Ticket
-	19, // 2: pb.GetTicketsWithStatusResponse.tickets:type_name -> pb.Ticket
-	0,  // 3: pb.ChangeTicketStatusRequest.status:type_name -> pb.TicketStatus
+	0,  // 2: pb.GetTicketsWithStatusRequest.status:type_name -> pb.TicketStatus
+	19, // 3: pb.GetTicketsWithStatusResponse.tickets:type_name -> pb.Ticket
 	0,  // 4: pb.Ticket.status:type_name -> pb.TicketStatus
 	1,  // 5: pb.TicketService.NewTicket:input_type -> pb.NewTicketRequest
 	3,  // 6: pb.TicketService.NewUser:input_type -> pb.NewUserRequest
@@ -1241,7 +1232,7 @@ var file_contract_proto_depIdxs = []int32{
 	7,  // 8: pb.TicketService.GetUserTickets:input_type -> pb.GetUserTicketsRequest
 	9,  // 9: pb.TicketService.GetSupportTickets:input_type -> pb.GetSupportTicketsRequest
 	11, // 10: pb.TicketService.GetTicketsWithStatus:input_type -> pb.GetTicketsWithStatusRequest
-	13, // 11: pb.TicketService.ChangeTicketStatus:input_type -> pb.ChangeTicketStatusRequest
+	13, // 11: pb.TicketService.CloseTicket:input_type -> pb.CloseTicketRequest
 	15, // 12: pb.TicketService.AnswerTicket:input_type -> pb.AnswerTicketRequest
 	17, // 13: pb.TicketService.TransferTicket:input_type -> pb.TransferTicketRequest
 	2,  // 14: pb.TicketService.NewTicket:output_type -> pb.NewTicketResponse
@@ -1250,7 +1241,7 @@ var file_contract_proto_depIdxs = []int32{
 	8,  // 17: pb.TicketService.GetUserTickets:output_type -> pb.GetUserTicketsResponse
 	10, // 18: pb.TicketService.GetSupportTickets:output_type -> pb.GetSupportTicketsResponse
 	12, // 19: pb.TicketService.GetTicketsWithStatus:output_type -> pb.GetTicketsWithStatusResponse
-	14, // 20: pb.TicketService.ChangeTicketStatus:output_type -> pb.ChangeTicketStatusResponse
+	14, // 20: pb.TicketService.CloseTicket:output_type -> pb.CloseTicketResponse
 	16, // 21: pb.TicketService.AnswerTicket:output_type -> pb.AnswerTicketResponse
 	18, // 22: pb.TicketService.TransferTicket:output_type -> pb.TransferTicketResponse
 	14, // [14:23] is the sub-list for method output_type

@@ -12,5 +12,7 @@ func NewUserRouter(userHandler *handlers.UserHandler) *chi.Mux {
 	r.Post("/newUser", userHandler.NewUser)
 	r.Post("/newTicket", userHandler.NewTicket)
 
+	r.Get("/{userID}/myTickets", userHandler.NewTicket)
+
 	return r
 }

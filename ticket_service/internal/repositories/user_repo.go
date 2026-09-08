@@ -27,7 +27,12 @@ func (r *UserRepo) CreateUser(ctx context.Context, name string) (*models.User, e
 	return &user, nil
 }
 
-func (r *UserRepo) GetMyTickets(userID string) ([]models.Ticket, error) {
-	r.dbConn.Query("INSERT INTO tickets VALUES ($1)")
-	return nil, nil
+func (r *UserRepo) GetUserTickets(ctx context.Context, userID string) ([]models.Ticket, error) {
+	var tickets []models.Ticket
+	err := r.dbConn.SelectContext(ctx, &tickets, "SELECT * FROM tickets WHERE user_id=$1", userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return tickets, nil
 }

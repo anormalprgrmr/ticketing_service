@@ -25,7 +25,7 @@ const (
 	TicketService_GetUserTickets_FullMethodName       = "/pb.TicketService/GetUserTickets"
 	TicketService_GetSupportTickets_FullMethodName    = "/pb.TicketService/GetSupportTickets"
 	TicketService_GetTicketsWithStatus_FullMethodName = "/pb.TicketService/GetTicketsWithStatus"
-	TicketService_ChangeTicketStatus_FullMethodName   = "/pb.TicketService/ChangeTicketStatus"
+	TicketService_CloseTicket_FullMethodName          = "/pb.TicketService/CloseTicket"
 	TicketService_AnswerTicket_FullMethodName         = "/pb.TicketService/AnswerTicket"
 	TicketService_TransferTicket_FullMethodName       = "/pb.TicketService/TransferTicket"
 )
@@ -40,7 +40,7 @@ type TicketServiceClient interface {
 	GetUserTickets(ctx context.Context, in *GetUserTicketsRequest, opts ...grpc.CallOption) (*GetUserTicketsResponse, error)
 	GetSupportTickets(ctx context.Context, in *GetSupportTicketsRequest, opts ...grpc.CallOption) (*GetSupportTicketsResponse, error)
 	GetTicketsWithStatus(ctx context.Context, in *GetTicketsWithStatusRequest, opts ...grpc.CallOption) (*GetTicketsWithStatusResponse, error)
-	ChangeTicketStatus(ctx context.Context, in *ChangeTicketStatusRequest, opts ...grpc.CallOption) (*ChangeTicketStatusResponse, error)
+	CloseTicket(ctx context.Context, in *CloseTicketRequest, opts ...grpc.CallOption) (*CloseTicketResponse, error)
 	AnswerTicket(ctx context.Context, in *AnswerTicketRequest, opts ...grpc.CallOption) (*AnswerTicketResponse, error)
 	TransferTicket(ctx context.Context, in *TransferTicketRequest, opts ...grpc.CallOption) (*TransferTicketResponse, error)
 }
@@ -113,10 +113,10 @@ func (c *ticketServiceClient) GetTicketsWithStatus(ctx context.Context, in *GetT
 	return out, nil
 }
 
-func (c *ticketServiceClient) ChangeTicketStatus(ctx context.Context, in *ChangeTicketStatusRequest, opts ...grpc.CallOption) (*ChangeTicketStatusResponse, error) {
+func (c *ticketServiceClient) CloseTicket(ctx context.Context, in *CloseTicketRequest, opts ...grpc.CallOption) (*CloseTicketResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(ChangeTicketStatusResponse)
-	err := c.cc.Invoke(ctx, TicketService_ChangeTicketStatus_FullMethodName, in, out, cOpts...)
+	out := new(CloseTicketResponse)
+	err := c.cc.Invoke(ctx, TicketService_CloseTicket_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -153,7 +153,7 @@ type TicketServiceServer interface {
 	GetUserTickets(context.Context, *GetUserTicketsRequest) (*GetUserTicketsResponse, error)
 	GetSupportTickets(context.Context, *GetSupportTicketsRequest) (*GetSupportTicketsResponse, error)
 	GetTicketsWithStatus(context.Context, *GetTicketsWithStatusRequest) (*GetTicketsWithStatusResponse, error)
-	ChangeTicketStatus(context.Context, *ChangeTicketStatusRequest) (*ChangeTicketStatusResponse, error)
+	CloseTicket(context.Context, *CloseTicketRequest) (*CloseTicketResponse, error)
 	AnswerTicket(context.Context, *AnswerTicketRequest) (*AnswerTicketResponse, error)
 	TransferTicket(context.Context, *TransferTicketRequest) (*TransferTicketResponse, error)
 	mustEmbedUnimplementedTicketServiceServer()
@@ -184,8 +184,8 @@ func (UnimplementedTicketServiceServer) GetSupportTickets(context.Context, *GetS
 func (UnimplementedTicketServiceServer) GetTicketsWithStatus(context.Context, *GetTicketsWithStatusRequest) (*GetTicketsWithStatusResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetTicketsWithStatus not implemented")
 }
-func (UnimplementedTicketServiceServer) ChangeTicketStatus(context.Context, *ChangeTicketStatusRequest) (*ChangeTicketStatusResponse, error) {
-	return nil, status.Error(codes.Unimplemented, "method ChangeTicketStatus not implemented")
+func (UnimplementedTicketServiceServer) CloseTicket(context.Context, *CloseTicketRequest) (*CloseTicketResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CloseTicket not implemented")
 }
 func (UnimplementedTicketServiceServer) AnswerTicket(context.Context, *AnswerTicketRequest) (*AnswerTicketResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method AnswerTicket not implemented")
@@ -322,20 +322,20 @@ func _TicketService_GetTicketsWithStatus_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TicketService_ChangeTicketStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ChangeTicketStatusRequest)
+func _TicketService_CloseTicket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CloseTicketRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TicketServiceServer).ChangeTicketStatus(ctx, in)
+		return srv.(TicketServiceServer).CloseTicket(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TicketService_ChangeTicketStatus_FullMethodName,
+		FullMethod: TicketService_CloseTicket_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TicketServiceServer).ChangeTicketStatus(ctx, req.(*ChangeTicketStatusRequest))
+		return srv.(TicketServiceServer).CloseTicket(ctx, req.(*CloseTicketRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -408,8 +408,8 @@ var TicketService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TicketService_GetTicketsWithStatus_Handler,
 		},
 		{
-			MethodName: "ChangeTicketStatus",
-			Handler:    _TicketService_ChangeTicketStatus_Handler,
+			MethodName: "CloseTicket",
+			Handler:    _TicketService_CloseTicket_Handler,
 		},
 		{
 			MethodName: "AnswerTicket",
