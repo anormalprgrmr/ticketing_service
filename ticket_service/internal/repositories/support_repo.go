@@ -32,10 +32,10 @@ func (r *SupportRepo) CreateSupport(ctx context.Context, name string) (supportID
 	return support.ID, nil
 }
 
-func (r *SupportRepo) GetSupportTickets(supportID string) (supportTickets []models.Ticket, err error) {
+func (r *SupportRepo) GetSupportTickets(ctx context.Context, supportID string) (supportTickets []models.Ticket, err error) {
 	var tickets []models.Ticket
 
-	err = r.dbConn.Select(&tickets, "SELECT * FROM tickets WHERE support_id = $1", supportID)
+	err = r.dbConn.SelectContext(ctx, &tickets, "SELECT * FROM tickets WHERE support_id = $1", supportID)
 	if err != nil {
 		return nil, err
 	}

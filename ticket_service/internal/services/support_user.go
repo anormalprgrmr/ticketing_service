@@ -2,6 +2,7 @@ package services
 
 import (
 	"context"
+	"ticket_service/internal/models"
 	"ticket_service/internal/repositories"
 	"uuid"
 )
@@ -24,4 +25,14 @@ func (s *SupportService) CreateSupport(ctx context.Context, name string) (suppor
 	}
 
 	return supportID, err
+}
+
+func (s *SupportService) GetSupportTickets(ctx context.Context, name string) ([]models.Ticket, error) {
+
+	tickets, err := s.supportRepo.GetSupportTickets(ctx, name)
+	if err != nil {
+		return nil, err
+	}
+
+	return tickets, err
 }

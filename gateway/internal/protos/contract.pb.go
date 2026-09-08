@@ -708,6 +708,7 @@ func (x *GetTicketsWithStatusResponse) GetTickets() []*Ticket {
 type CloseTicketRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	TicketId      string                 `protobuf:"bytes,1,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
+	SupportId     string                 `protobuf:"bytes,2,opt,name=support_id,json=supportId,proto3" json:"support_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -745,6 +746,13 @@ func (*CloseTicketRequest) Descriptor() ([]byte, []int) {
 func (x *CloseTicketRequest) GetTicketId() string {
 	if x != nil {
 		return x.TicketId
+	}
+	return ""
+}
+
+func (x *CloseTicketRequest) GetSupportId() string {
+	if x != nil {
+		return x.SupportId
 	}
 	return ""
 }
@@ -1139,9 +1147,11 @@ const file_contract_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05error\x18\x02 \x01(\tR\x05error\x12$\n" +
 	"\atickets\x18\x03 \x03(\v2\n" +
-	".pb.TicketR\atickets\"1\n" +
+	".pb.TicketR\atickets\"P\n" +
 	"\x12CloseTicketRequest\x12\x1b\n" +
-	"\tticket_id\x18\x01 \x01(\tR\bticketId\"E\n" +
+	"\tticket_id\x18\x01 \x01(\tR\bticketId\x12\x1d\n" +
+	"\n" +
+	"support_id\x18\x02 \x01(\tR\tsupportId\"E\n" +
 	"\x13CloseTicketResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05error\x18\x02 \x01(\tR\x05error\"e\n" +

@@ -24,27 +24,25 @@ func (r *TicketRepo) NewTicket(ctx context.Context, userID, body string) (*model
 	return &ticket, nil
 }
 
-func (r *TicketRepo) GetTicketByID(userID, ticketID string) (*models.Ticket, error) {
-	r.dbConn.Query("INSERT INTO tickets VALUES ($1)")
+func (r *TicketRepo) GetTicketsWithStatus(ctx context.Context, status string) ([]models.Ticket, error) {
+	var tickets []models.Ticket
+	r.dbConn.SelectContext(ctx, &tickets, "SELECT * FROM tickets WHERE status=$1", status)
 	return nil, nil
 }
 
-func (r *TicketRepo) ChangeTicketStatus(ticketID string, status models.TicketStatus) error {
-	r.dbConn.Query("INSERT INTO tickets VALUES ($1)")
-	return nil
+func (r *TicketRepo) CloseTicket(ctx context.Context, ticketID string, supportID string) error {
+	_, err := r.dbConn.ExecContext(ctx, "UPDATE tickets SET status = 'Closed' WHERE id=$1 AND support_id=$2;", ticketID, supportID)
+	return err
 }
 
-func (r *TicketRepo) ResponseTicket(ticketID, body string) error {
-	r.dbConn.Query("INSERT INTO tickets VALUES ($1)")
-	return nil
+func (r *TicketRepo) TransferTicket(ctx context.Context, ticketID, newSupportID string) error {
+	_, err := r.dbConn.ExecContext(ctx, "UPDATE tickets SET support_id=$1 WHERE id=$2;", newSupportID, ticketID)
+	return err
 }
 
-func (r *TicketRepo) GetTicketsWithStatus(status models.TicketStatus) ([]models.Ticket, error) {
-	r.dbConn.Query("INSERT INTO tickets VALUES ($1)")
-	return nil, nil
-}
+func (r *TicketRepo) AnswerTicket(ctx context.Context, ticketID, supportID, body string) error {
 
-func (r *TicketRepo) TransferTicket(ticketID, newSupportID string) error {
-	r.dbConn.Query("INSERT INTO tickets VALUES ($1)")
-	return nil
+	// TODO: check support ID too
+	_, err := r.dbConn.QueryContext(ctx, "INSERT INTO ticket_responses(ticket_id,body) VALUES ($1,$2)", ticketID, body)
+	return err
 }

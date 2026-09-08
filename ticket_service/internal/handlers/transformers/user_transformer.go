@@ -15,14 +15,14 @@ func TicketModelToGRPC(tickets []models.Ticket) []*pb.Ticket {
 			UserId:    ticket.UserID.String(),
 			SupportId: ticket.SupportID.String(),
 			Body:      ticket.Body,
-			Status:    resolveTicketStatus(ticket.Status),
+			Status:    ConvertTicketStatusModelToGRPC(ticket.Status),
 		})
 	}
 
 	return pbTickets
 }
 
-func resolveTicketStatus(status models.TicketStatus) pb.TicketStatus {
+func ConvertTicketStatusModelToGRPC(status models.TicketStatus) pb.TicketStatus {
 	switch status {
 	case models.Opened:
 		return pb.TicketStatus_TICKET_STATUS_OPEN
@@ -33,4 +33,17 @@ func resolveTicketStatus(status models.TicketStatus) pb.TicketStatus {
 	default:
 		return pb.TicketStatus_TICKET_STATUS_UNSPECIFIED
 	}
+}
+
+func ConvertTicketStatusGRPCToModel(status pb.TicketStatus) models.TicketStatus {
+	switch status {
+	case pb.TicketStatus_TICKET_STATUS_OPEN:
+		return models.Opened
+	case pb.TicketStatus_TICKET_STATUS_ANSWERED:
+		return models.Answered
+	case pb.TicketStatus_TICKET_STATUS_CLOSED:
+		return models.Closed
+	}
+
+	return models.Opened
 }

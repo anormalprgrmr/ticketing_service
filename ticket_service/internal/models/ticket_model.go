@@ -17,3 +17,16 @@ type Ticket struct {
 	Body      string       `db:"body"`
 	Status    TicketStatus `db:"status"`
 }
+
+func TicketStatusToString(status TicketStatus) string {
+	switch status {
+	case Opened:
+		return "Opened"
+	case Answered:
+		return "Answered"
+	case Closed:
+		return "Closed"
+	}
+
+	return ""
+}

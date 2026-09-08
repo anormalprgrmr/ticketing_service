@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"ticket_service/internal/handlers/transformers"
 	pb "ticket_service/internal/protos"
 	"ticket_service/internal/services"
 )
@@ -35,3 +36,64 @@ func (h *TicketHandler) NewTicket(ctx context.Context, in *pb.NewTicketRequest) 
 	}, nil
 }
 
+func (h *TicketHandler) GetTicketsWithStatus(ctx context.Context, in *pb.GetTicketsWithStatusRequest) (*pb.GetTicketsWithStatusResponse, error) {
+	tickets, err := h.ticketService.GetTicketsWithStatus(ctx, transformers.ConvertTicketStatusGRPCToModel(in.Status))
+	if err != nil {
+		return &pb.GetTicketsWithStatusResponse{
+			Success: false,
+			Error:   err.Error(),
+			Tickets: nil,
+		}, err
+	}
+
+	return &pb.GetTicketsWithStatusResponse{
+		Success: true,
+		Error:   "",
+		Tickets: transformers.TicketModelToGRPC(tickets),
+	}, nil
+}
+
+func (h *TicketHandler) CloseTicket(ctx context.Context, in *pb.CloseTicketRequest) (*pb.CloseTicketResponse, error) {
+	err := h.ticketService.CloseTicket(ctx, in.TicketId, in.SupportId)
+	if err != nil {
+		return &pb.CloseTicketResponse{
+			Success: false,
+			Error:   err.Error(),
+		}, err
+	}
+
+	return &pb.CloseTicketResponse{
+		Success: true,
+		Error:   "",
+	}, nil
+}
+
+func (h *TicketHandler) AnswerTicket(ctx context.Context, in *pb.AnswerTicketRequest) (*pb.AnswerTicketResponse, error) {
+	err := h.ticketService.AnswerTicket(ctx, in.TicketId, in.SupportId, in.Body)
+	if err != nil {
+		return &pb.AnswerTicketResponse{
+			Success: false,
+			Error:   err.Error(),
+		}, err
+	}
+
+	return &pb.AnswerTicketResponse{
+		Success: true,
+		Error:   "",
+	}, nil
+}
+
+func (h *TicketHandler) TransferTicket(ctx context.Context, in *pb.TransferTicketRequest) (*pb.TransferTicketResponse, error) {
+	err := h.ticketService.TransferTicket(ctx, in.TicketId, in.SupportId)
+	if err != nil {
+		return &pb.TransferTicketResponse{
+			Success: false,
+			Error:   err.Error(),
+		}, err
+	}
+
+	return &pb.TransferTicketResponse{
+		Success: true,
+		Error:   "",
+	}, nil
+}

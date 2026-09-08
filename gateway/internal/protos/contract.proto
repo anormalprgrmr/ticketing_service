@@ -81,6 +81,7 @@ message GetTicketsWithStatusResponse {
 
 message CloseTicketRequest {
   string ticket_id = 1;
+  string support_id = 2;
 }
 
 message CloseTicketResponse {
