@@ -23,14 +23,14 @@ func (h *SupportHandler) NewSupport(ctx context.Context, req *pb.NewSupportReque
 		return &pb.NewSupportResponse{
 			Success:   false,
 			Error:     err.Error(),
-			SupportID: "",
+			SupportId: "",
 		}, err
 	}
 
 	return &pb.NewSupportResponse{
 		Success:   true,
 		Error:     "",
-		SupportID: supportID.String(),
+		SupportId: supportID.String(),
 	}, nil
 
 }

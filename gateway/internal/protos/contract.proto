@@ -5,20 +5,28 @@ package pb;
 option go_package = "ticket_service/internal/protos;pb";
 
 service TicketService {
-  rpc NewTicket (NewTicketRequest) returns (NewTicketResponse) {}
-  rpc NewUser (NewUserRequest) returns (NewUserResponse) {}
-  rpc NewSupport (NewSupportRequest) returns (NewSupportResponse) {}
+  rpc NewTicket(NewTicketRequest) returns (NewTicketResponse) {}
+  rpc NewUser(NewUserRequest) returns (NewUserResponse) {}
+  rpc NewSupport(NewSupportRequest) returns (NewSupportResponse) {}
+
+  rpc GetUserTickets(GetUserTicketsRequest) returns (GetUserTicketsResponse) {}
+  rpc GetSupportTickets(GetSupportTicketsRequest) returns (GetSupportTicketsResponse) {}
+  rpc GetTicketsWithStatus(GetTicketsWithStatusRequest) returns (GetTicketsWithStatusResponse) {}
+
+  rpc ChangeTicketStatus(ChangeTicketStatusRequest) returns (ChangeTicketStatusResponse) {}
+  rpc AnswerTicket(AnswerTicketRequest) returns (AnswerTicketResponse) {}
+  rpc TransferTicket(TransferTicketRequest) returns (TransferTicketResponse) {}
 }
 
 message NewTicketRequest {
-  string userID = 1;
+  string user_id = 1;
   string body = 2;
 }
 
 message NewTicketResponse {
   bool success = 1;
   string error = 2;
-  string ticketID = 3;
+  string ticket_id = 3;
 }
 
 message NewUserRequest {
@@ -28,7 +36,7 @@ message NewUserRequest {
 message NewUserResponse {
   bool success = 1;
   string error = 2;
-  string userID = 3;
+  string user_id = 3;
 }
 
 message NewSupportRequest {
@@ -38,5 +46,81 @@ message NewSupportRequest {
 message NewSupportResponse {
   bool success = 1;
   string error = 2;
-  string supportID = 3;
+  string support_id = 3;
+}
+
+message GetUserTicketsRequest {
+  string user_id = 1;
+}
+
+message GetUserTicketsResponse {
+  bool success = 1;
+  string error = 2;
+  repeated Ticket tickets = 3;
+}
+
+message GetSupportTicketsRequest {
+  string support_id = 1;
+}
+
+message GetSupportTicketsResponse {
+  bool success = 1;
+  string error = 2;
+  repeated Ticket tickets = 3;
+}
+
+message GetTicketsWithStatusRequest {
+  string name = 1;
+}
+
+message GetTicketsWithStatusResponse {
+  bool success = 1;
+  string error = 2;
+  repeated Ticket tickets = 3;
+}
+
+message ChangeTicketStatusRequest {
+  string ticket_id = 1;
+  TicketStatus status = 2;
+}
+
+message ChangeTicketStatusResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+message AnswerTicketRequest {
+  string support_id = 1;
+  string ticket_id = 2;
+  string body = 3;
+}
+
+message AnswerTicketResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+message TransferTicketRequest {
+  string ticket_id = 1;
+  string support_id = 2;
+}
+
+message TransferTicketResponse {
+  bool success = 1;
+  string error = 2;
+}
+
+enum TicketStatus {
+  TICKET_STATUS_UNSPECIFIED = 0;
+  TICKET_STATUS_OPEN = 1;
+  TICKET_STATUS_ANSWERED = 2;
+  TICKET_STATUS_CLOSED = 3;
+}
+
+message Ticket {
+  string id = 1;
+  string user_id = 2;
+  string support_id = 3;
+  string body = 4;
+  TicketStatus status = 5;
 }

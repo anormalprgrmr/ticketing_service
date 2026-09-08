@@ -21,9 +21,61 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type TicketStatus int32
+
+const (
+	TicketStatus_TICKET_STATUS_UNSPECIFIED TicketStatus = 0
+	TicketStatus_TICKET_STATUS_OPEN        TicketStatus = 1
+	TicketStatus_TICKET_STATUS_ANSWERED    TicketStatus = 2
+	TicketStatus_TICKET_STATUS_CLOSED      TicketStatus = 3
+)
+
+// Enum value maps for TicketStatus.
+var (
+	TicketStatus_name = map[int32]string{
+		0: "TICKET_STATUS_UNSPECIFIED",
+		1: "TICKET_STATUS_OPEN",
+		2: "TICKET_STATUS_ANSWERED",
+		3: "TICKET_STATUS_CLOSED",
+	}
+	TicketStatus_value = map[string]int32{
+		"TICKET_STATUS_UNSPECIFIED": 0,
+		"TICKET_STATUS_OPEN":        1,
+		"TICKET_STATUS_ANSWERED":    2,
+		"TICKET_STATUS_CLOSED":      3,
+	}
+)
+
+func (x TicketStatus) Enum() *TicketStatus {
+	p := new(TicketStatus)
+	*p = x
+	return p
+}
+
+func (x TicketStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (TicketStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_contract_proto_enumTypes[0].Descriptor()
+}
+
+func (TicketStatus) Type() protoreflect.EnumType {
+	return &file_contract_proto_enumTypes[0]
+}
+
+func (x TicketStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use TicketStatus.Descriptor instead.
+func (TicketStatus) EnumDescriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{0}
+}
+
 type NewTicketRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserID        string                 `protobuf:"bytes,1,opt,name=userID,proto3" json:"userID,omitempty"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Body          string                 `protobuf:"bytes,2,opt,name=body,proto3" json:"body,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -59,9 +111,9 @@ func (*NewTicketRequest) Descriptor() ([]byte, []int) {
 	return file_contract_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *NewTicketRequest) GetUserID() string {
+func (x *NewTicketRequest) GetUserId() string {
 	if x != nil {
-		return x.UserID
+		return x.UserId
 	}
 	return ""
 }
@@ -77,7 +129,7 @@ type NewTicketResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	TicketID      string                 `protobuf:"bytes,3,opt,name=ticketID,proto3" json:"ticketID,omitempty"`
+	TicketId      string                 `protobuf:"bytes,3,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -126,9 +178,9 @@ func (x *NewTicketResponse) GetError() string {
 	return ""
 }
 
-func (x *NewTicketResponse) GetTicketID() string {
+func (x *NewTicketResponse) GetTicketId() string {
 	if x != nil {
-		return x.TicketID
+		return x.TicketId
 	}
 	return ""
 }
@@ -181,7 +233,7 @@ type NewUserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	UserID        string                 `protobuf:"bytes,3,opt,name=userID,proto3" json:"userID,omitempty"`
+	UserId        string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -230,9 +282,9 @@ func (x *NewUserResponse) GetError() string {
 	return ""
 }
 
-func (x *NewUserResponse) GetUserID() string {
+func (x *NewUserResponse) GetUserId() string {
 	if x != nil {
-		return x.UserID
+		return x.UserId
 	}
 	return ""
 }
@@ -285,7 +337,7 @@ type NewSupportResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
 	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	SupportID     string                 `protobuf:"bytes,3,opt,name=supportID,proto3" json:"supportID,omitempty"`
+	SupportId     string                 `protobuf:"bytes,3,opt,name=support_id,json=supportId,proto3" json:"support_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -334,42 +386,812 @@ func (x *NewSupportResponse) GetError() string {
 	return ""
 }
 
-func (x *NewSupportResponse) GetSupportID() string {
+func (x *NewSupportResponse) GetSupportId() string {
 	if x != nil {
-		return x.SupportID
+		return x.SupportId
 	}
 	return ""
+}
+
+type GetUserTicketsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserTicketsRequest) Reset() {
+	*x = GetUserTicketsRequest{}
+	mi := &file_contract_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserTicketsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserTicketsRequest) ProtoMessage() {}
+
+func (x *GetUserTicketsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserTicketsRequest.ProtoReflect.Descriptor instead.
+func (*GetUserTicketsRequest) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetUserTicketsRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+type GetUserTicketsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	Tickets       []*Ticket              `protobuf:"bytes,3,rep,name=tickets,proto3" json:"tickets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserTicketsResponse) Reset() {
+	*x = GetUserTicketsResponse{}
+	mi := &file_contract_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserTicketsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserTicketsResponse) ProtoMessage() {}
+
+func (x *GetUserTicketsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserTicketsResponse.ProtoReflect.Descriptor instead.
+func (*GetUserTicketsResponse) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetUserTicketsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetUserTicketsResponse) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
+func (x *GetUserTicketsResponse) GetTickets() []*Ticket {
+	if x != nil {
+		return x.Tickets
+	}
+	return nil
+}
+
+type GetSupportTicketsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SupportId     string                 `protobuf:"bytes,1,opt,name=support_id,json=supportId,proto3" json:"support_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSupportTicketsRequest) Reset() {
+	*x = GetSupportTicketsRequest{}
+	mi := &file_contract_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSupportTicketsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSupportTicketsRequest) ProtoMessage() {}
+
+func (x *GetSupportTicketsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSupportTicketsRequest.ProtoReflect.Descriptor instead.
+func (*GetSupportTicketsRequest) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GetSupportTicketsRequest) GetSupportId() string {
+	if x != nil {
+		return x.SupportId
+	}
+	return ""
+}
+
+type GetSupportTicketsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	Tickets       []*Ticket              `protobuf:"bytes,3,rep,name=tickets,proto3" json:"tickets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSupportTicketsResponse) Reset() {
+	*x = GetSupportTicketsResponse{}
+	mi := &file_contract_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSupportTicketsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSupportTicketsResponse) ProtoMessage() {}
+
+func (x *GetSupportTicketsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSupportTicketsResponse.ProtoReflect.Descriptor instead.
+func (*GetSupportTicketsResponse) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *GetSupportTicketsResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetSupportTicketsResponse) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
+func (x *GetSupportTicketsResponse) GetTickets() []*Ticket {
+	if x != nil {
+		return x.Tickets
+	}
+	return nil
+}
+
+type GetTicketsWithStatusRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetTicketsWithStatusRequest) Reset() {
+	*x = GetTicketsWithStatusRequest{}
+	mi := &file_contract_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetTicketsWithStatusRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTicketsWithStatusRequest) ProtoMessage() {}
+
+func (x *GetTicketsWithStatusRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTicketsWithStatusRequest.ProtoReflect.Descriptor instead.
+func (*GetTicketsWithStatusRequest) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *GetTicketsWithStatusRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type GetTicketsWithStatusResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	Tickets       []*Ticket              `protobuf:"bytes,3,rep,name=tickets,proto3" json:"tickets,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetTicketsWithStatusResponse) Reset() {
+	*x = GetTicketsWithStatusResponse{}
+	mi := &file_contract_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetTicketsWithStatusResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetTicketsWithStatusResponse) ProtoMessage() {}
+
+func (x *GetTicketsWithStatusResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetTicketsWithStatusResponse.ProtoReflect.Descriptor instead.
+func (*GetTicketsWithStatusResponse) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *GetTicketsWithStatusResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *GetTicketsWithStatusResponse) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
+func (x *GetTicketsWithStatusResponse) GetTickets() []*Ticket {
+	if x != nil {
+		return x.Tickets
+	}
+	return nil
+}
+
+type ChangeTicketStatusRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TicketId      string                 `protobuf:"bytes,1,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
+	Status        TicketStatus           `protobuf:"varint,2,opt,name=status,proto3,enum=pb.TicketStatus" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChangeTicketStatusRequest) Reset() {
+	*x = ChangeTicketStatusRequest{}
+	mi := &file_contract_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChangeTicketStatusRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChangeTicketStatusRequest) ProtoMessage() {}
+
+func (x *ChangeTicketStatusRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChangeTicketStatusRequest.ProtoReflect.Descriptor instead.
+func (*ChangeTicketStatusRequest) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *ChangeTicketStatusRequest) GetTicketId() string {
+	if x != nil {
+		return x.TicketId
+	}
+	return ""
+}
+
+func (x *ChangeTicketStatusRequest) GetStatus() TicketStatus {
+	if x != nil {
+		return x.Status
+	}
+	return TicketStatus_TICKET_STATUS_UNSPECIFIED
+}
+
+type ChangeTicketStatusResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChangeTicketStatusResponse) Reset() {
+	*x = ChangeTicketStatusResponse{}
+	mi := &file_contract_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChangeTicketStatusResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChangeTicketStatusResponse) ProtoMessage() {}
+
+func (x *ChangeTicketStatusResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChangeTicketStatusResponse.ProtoReflect.Descriptor instead.
+func (*ChangeTicketStatusResponse) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *ChangeTicketStatusResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *ChangeTicketStatusResponse) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
+type AnswerTicketRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	SupportId     string                 `protobuf:"bytes,1,opt,name=support_id,json=supportId,proto3" json:"support_id,omitempty"`
+	TicketId      string                 `protobuf:"bytes,2,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
+	Body          string                 `protobuf:"bytes,3,opt,name=body,proto3" json:"body,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AnswerTicketRequest) Reset() {
+	*x = AnswerTicketRequest{}
+	mi := &file_contract_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AnswerTicketRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AnswerTicketRequest) ProtoMessage() {}
+
+func (x *AnswerTicketRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AnswerTicketRequest.ProtoReflect.Descriptor instead.
+func (*AnswerTicketRequest) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *AnswerTicketRequest) GetSupportId() string {
+	if x != nil {
+		return x.SupportId
+	}
+	return ""
+}
+
+func (x *AnswerTicketRequest) GetTicketId() string {
+	if x != nil {
+		return x.TicketId
+	}
+	return ""
+}
+
+func (x *AnswerTicketRequest) GetBody() string {
+	if x != nil {
+		return x.Body
+	}
+	return ""
+}
+
+type AnswerTicketResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AnswerTicketResponse) Reset() {
+	*x = AnswerTicketResponse{}
+	mi := &file_contract_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AnswerTicketResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AnswerTicketResponse) ProtoMessage() {}
+
+func (x *AnswerTicketResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AnswerTicketResponse.ProtoReflect.Descriptor instead.
+func (*AnswerTicketResponse) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *AnswerTicketResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *AnswerTicketResponse) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
+type TransferTicketRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	TicketId      string                 `protobuf:"bytes,1,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`
+	SupportId     string                 `protobuf:"bytes,2,opt,name=support_id,json=supportId,proto3" json:"support_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TransferTicketRequest) Reset() {
+	*x = TransferTicketRequest{}
+	mi := &file_contract_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TransferTicketRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TransferTicketRequest) ProtoMessage() {}
+
+func (x *TransferTicketRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TransferTicketRequest.ProtoReflect.Descriptor instead.
+func (*TransferTicketRequest) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *TransferTicketRequest) GetTicketId() string {
+	if x != nil {
+		return x.TicketId
+	}
+	return ""
+}
+
+func (x *TransferTicketRequest) GetSupportId() string {
+	if x != nil {
+		return x.SupportId
+	}
+	return ""
+}
+
+type TransferTicketResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Success       bool                   `protobuf:"varint,1,opt,name=success,proto3" json:"success,omitempty"`
+	Error         string                 `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TransferTicketResponse) Reset() {
+	*x = TransferTicketResponse{}
+	mi := &file_contract_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TransferTicketResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TransferTicketResponse) ProtoMessage() {}
+
+func (x *TransferTicketResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TransferTicketResponse.ProtoReflect.Descriptor instead.
+func (*TransferTicketResponse) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *TransferTicketResponse) GetSuccess() bool {
+	if x != nil {
+		return x.Success
+	}
+	return false
+}
+
+func (x *TransferTicketResponse) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
+type Ticket struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	SupportId     string                 `protobuf:"bytes,3,opt,name=support_id,json=supportId,proto3" json:"support_id,omitempty"`
+	Body          string                 `protobuf:"bytes,4,opt,name=body,proto3" json:"body,omitempty"`
+	Status        TicketStatus           `protobuf:"varint,5,opt,name=status,proto3,enum=pb.TicketStatus" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Ticket) Reset() {
+	*x = Ticket{}
+	mi := &file_contract_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Ticket) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Ticket) ProtoMessage() {}
+
+func (x *Ticket) ProtoReflect() protoreflect.Message {
+	mi := &file_contract_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Ticket.ProtoReflect.Descriptor instead.
+func (*Ticket) Descriptor() ([]byte, []int) {
+	return file_contract_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *Ticket) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Ticket) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *Ticket) GetSupportId() string {
+	if x != nil {
+		return x.SupportId
+	}
+	return ""
+}
+
+func (x *Ticket) GetBody() string {
+	if x != nil {
+		return x.Body
+	}
+	return ""
+}
+
+func (x *Ticket) GetStatus() TicketStatus {
+	if x != nil {
+		return x.Status
+	}
+	return TicketStatus_TICKET_STATUS_UNSPECIFIED
 }
 
 var File_contract_proto protoreflect.FileDescriptor
 
 const file_contract_proto_rawDesc = "" +
 	"\n" +
-	"\x0econtract.proto\x12\x02pb\">\n" +
-	"\x10NewTicketRequest\x12\x16\n" +
-	"\x06userID\x18\x01 \x01(\tR\x06userID\x12\x12\n" +
-	"\x04body\x18\x02 \x01(\tR\x04body\"_\n" +
+	"\x0econtract.proto\x12\x02pb\"?\n" +
+	"\x10NewTicketRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x12\n" +
+	"\x04body\x18\x02 \x01(\tR\x04body\"`\n" +
 	"\x11NewTicketResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
-	"\x05error\x18\x02 \x01(\tR\x05error\x12\x1a\n" +
-	"\bticketID\x18\x03 \x01(\tR\bticketID\"$\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error\x12\x1b\n" +
+	"\tticket_id\x18\x03 \x01(\tR\bticketId\"$\n" +
 	"\x0eNewUserRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"Y\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"Z\n" +
 	"\x0fNewUserResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
-	"\x05error\x18\x02 \x01(\tR\x05error\x12\x16\n" +
-	"\x06userID\x18\x03 \x01(\tR\x06userID\"'\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error\x12\x17\n" +
+	"\auser_id\x18\x03 \x01(\tR\x06userId\"'\n" +
 	"\x11NewSupportRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"b\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"c\n" +
 	"\x12NewSupportResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
-	"\x05error\x18\x02 \x01(\tR\x05error\x12\x1c\n" +
-	"\tsupportID\x18\x03 \x01(\tR\tsupportID2\xc0\x01\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error\x12\x1d\n" +
+	"\n" +
+	"support_id\x18\x03 \x01(\tR\tsupportId\"0\n" +
+	"\x15GetUserTicketsRequest\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\"n\n" +
+	"\x16GetUserTicketsResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error\x12$\n" +
+	"\atickets\x18\x03 \x03(\v2\n" +
+	".pb.TicketR\atickets\"9\n" +
+	"\x18GetSupportTicketsRequest\x12\x1d\n" +
+	"\n" +
+	"support_id\x18\x01 \x01(\tR\tsupportId\"q\n" +
+	"\x19GetSupportTicketsResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error\x12$\n" +
+	"\atickets\x18\x03 \x03(\v2\n" +
+	".pb.TicketR\atickets\"1\n" +
+	"\x1bGetTicketsWithStatusRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"t\n" +
+	"\x1cGetTicketsWithStatusResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error\x12$\n" +
+	"\atickets\x18\x03 \x03(\v2\n" +
+	".pb.TicketR\atickets\"b\n" +
+	"\x19ChangeTicketStatusRequest\x12\x1b\n" +
+	"\tticket_id\x18\x01 \x01(\tR\bticketId\x12(\n" +
+	"\x06status\x18\x02 \x01(\x0e2\x10.pb.TicketStatusR\x06status\"L\n" +
+	"\x1aChangeTicketStatusResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error\"e\n" +
+	"\x13AnswerTicketRequest\x12\x1d\n" +
+	"\n" +
+	"support_id\x18\x01 \x01(\tR\tsupportId\x12\x1b\n" +
+	"\tticket_id\x18\x02 \x01(\tR\bticketId\x12\x12\n" +
+	"\x04body\x18\x03 \x01(\tR\x04body\"F\n" +
+	"\x14AnswerTicketResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error\"S\n" +
+	"\x15TransferTicketRequest\x12\x1b\n" +
+	"\tticket_id\x18\x01 \x01(\tR\bticketId\x12\x1d\n" +
+	"\n" +
+	"support_id\x18\x02 \x01(\tR\tsupportId\"H\n" +
+	"\x16TransferTicketResponse\x12\x18\n" +
+	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
+	"\x05error\x18\x02 \x01(\tR\x05error\"\x8e\x01\n" +
+	"\x06Ticket\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x1d\n" +
+	"\n" +
+	"support_id\x18\x03 \x01(\tR\tsupportId\x12\x12\n" +
+	"\x04body\x18\x04 \x01(\tR\x04body\x12(\n" +
+	"\x06status\x18\x05 \x01(\x0e2\x10.pb.TicketStatusR\x06status*{\n" +
+	"\fTicketStatus\x12\x1d\n" +
+	"\x19TICKET_STATUS_UNSPECIFIED\x10\x00\x12\x16\n" +
+	"\x12TICKET_STATUS_OPEN\x10\x01\x12\x1a\n" +
+	"\x16TICKET_STATUS_ANSWERED\x10\x02\x12\x18\n" +
+	"\x14TICKET_STATUS_CLOSED\x10\x032\xa3\x05\n" +
 	"\rTicketService\x12:\n" +
 	"\tNewTicket\x12\x14.pb.NewTicketRequest\x1a\x15.pb.NewTicketResponse\"\x00\x124\n" +
 	"\aNewUser\x12\x12.pb.NewUserRequest\x1a\x13.pb.NewUserResponse\"\x00\x12=\n" +
 	"\n" +
-	"NewSupport\x12\x15.pb.NewSupportRequest\x1a\x16.pb.NewSupportResponse\"\x00B#Z!ticket_service/internal/protos;pbb\x06proto3"
+	"NewSupport\x12\x15.pb.NewSupportRequest\x1a\x16.pb.NewSupportResponse\"\x00\x12I\n" +
+	"\x0eGetUserTickets\x12\x19.pb.GetUserTicketsRequest\x1a\x1a.pb.GetUserTicketsResponse\"\x00\x12R\n" +
+	"\x11GetSupportTickets\x12\x1c.pb.GetSupportTicketsRequest\x1a\x1d.pb.GetSupportTicketsResponse\"\x00\x12[\n" +
+	"\x14GetTicketsWithStatus\x12\x1f.pb.GetTicketsWithStatusRequest\x1a .pb.GetTicketsWithStatusResponse\"\x00\x12U\n" +
+	"\x12ChangeTicketStatus\x12\x1d.pb.ChangeTicketStatusRequest\x1a\x1e.pb.ChangeTicketStatusResponse\"\x00\x12C\n" +
+	"\fAnswerTicket\x12\x17.pb.AnswerTicketRequest\x1a\x18.pb.AnswerTicketResponse\"\x00\x12I\n" +
+	"\x0eTransferTicket\x12\x19.pb.TransferTicketRequest\x1a\x1a.pb.TransferTicketResponse\"\x00B#Z!ticket_service/internal/protos;pbb\x06proto3"
 
 var (
 	file_contract_proto_rawDescOnce sync.Once
@@ -383,27 +1205,59 @@ func file_contract_proto_rawDescGZIP() []byte {
 	return file_contract_proto_rawDescData
 }
 
-var file_contract_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_contract_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_contract_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_contract_proto_goTypes = []any{
-	(*NewTicketRequest)(nil),   // 0: pb.NewTicketRequest
-	(*NewTicketResponse)(nil),  // 1: pb.NewTicketResponse
-	(*NewUserRequest)(nil),     // 2: pb.NewUserRequest
-	(*NewUserResponse)(nil),    // 3: pb.NewUserResponse
-	(*NewSupportRequest)(nil),  // 4: pb.NewSupportRequest
-	(*NewSupportResponse)(nil), // 5: pb.NewSupportResponse
+	(TicketStatus)(0),                    // 0: pb.TicketStatus
+	(*NewTicketRequest)(nil),             // 1: pb.NewTicketRequest
+	(*NewTicketResponse)(nil),            // 2: pb.NewTicketResponse
+	(*NewUserRequest)(nil),               // 3: pb.NewUserRequest
+	(*NewUserResponse)(nil),              // 4: pb.NewUserResponse
+	(*NewSupportRequest)(nil),            // 5: pb.NewSupportRequest
+	(*NewSupportResponse)(nil),           // 6: pb.NewSupportResponse
+	(*GetUserTicketsRequest)(nil),        // 7: pb.GetUserTicketsRequest
+	(*GetUserTicketsResponse)(nil),       // 8: pb.GetUserTicketsResponse
+	(*GetSupportTicketsRequest)(nil),     // 9: pb.GetSupportTicketsRequest
+	(*GetSupportTicketsResponse)(nil),    // 10: pb.GetSupportTicketsResponse
+	(*GetTicketsWithStatusRequest)(nil),  // 11: pb.GetTicketsWithStatusRequest
+	(*GetTicketsWithStatusResponse)(nil), // 12: pb.GetTicketsWithStatusResponse
+	(*ChangeTicketStatusRequest)(nil),    // 13: pb.ChangeTicketStatusRequest
+	(*ChangeTicketStatusResponse)(nil),   // 14: pb.ChangeTicketStatusResponse
+	(*AnswerTicketRequest)(nil),          // 15: pb.AnswerTicketRequest
+	(*AnswerTicketResponse)(nil),         // 16: pb.AnswerTicketResponse
+	(*TransferTicketRequest)(nil),        // 17: pb.TransferTicketRequest
+	(*TransferTicketResponse)(nil),       // 18: pb.TransferTicketResponse
+	(*Ticket)(nil),                       // 19: pb.Ticket
 }
 var file_contract_proto_depIdxs = []int32{
-	0, // 0: pb.TicketService.NewTicket:input_type -> pb.NewTicketRequest
-	2, // 1: pb.TicketService.NewUser:input_type -> pb.NewUserRequest
-	4, // 2: pb.TicketService.NewSupport:input_type -> pb.NewSupportRequest
-	1, // 3: pb.TicketService.NewTicket:output_type -> pb.NewTicketResponse
-	3, // 4: pb.TicketService.NewUser:output_type -> pb.NewUserResponse
-	5, // 5: pb.TicketService.NewSupport:output_type -> pb.NewSupportResponse
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	19, // 0: pb.GetUserTicketsResponse.tickets:type_name -> pb.Ticket
+	19, // 1: pb.GetSupportTicketsResponse.tickets:type_name -> pb.Ticket
+	19, // 2: pb.GetTicketsWithStatusResponse.tickets:type_name -> pb.Ticket
+	0,  // 3: pb.ChangeTicketStatusRequest.status:type_name -> pb.TicketStatus
+	0,  // 4: pb.Ticket.status:type_name -> pb.TicketStatus
+	1,  // 5: pb.TicketService.NewTicket:input_type -> pb.NewTicketRequest
+	3,  // 6: pb.TicketService.NewUser:input_type -> pb.NewUserRequest
+	5,  // 7: pb.TicketService.NewSupport:input_type -> pb.NewSupportRequest
+	7,  // 8: pb.TicketService.GetUserTickets:input_type -> pb.GetUserTicketsRequest
+	9,  // 9: pb.TicketService.GetSupportTickets:input_type -> pb.GetSupportTicketsRequest
+	11, // 10: pb.TicketService.GetTicketsWithStatus:input_type -> pb.GetTicketsWithStatusRequest
+	13, // 11: pb.TicketService.ChangeTicketStatus:input_type -> pb.ChangeTicketStatusRequest
+	15, // 12: pb.TicketService.AnswerTicket:input_type -> pb.AnswerTicketRequest
+	17, // 13: pb.TicketService.TransferTicket:input_type -> pb.TransferTicketRequest
+	2,  // 14: pb.TicketService.NewTicket:output_type -> pb.NewTicketResponse
+	4,  // 15: pb.TicketService.NewUser:output_type -> pb.NewUserResponse
+	6,  // 16: pb.TicketService.NewSupport:output_type -> pb.NewSupportResponse
+	8,  // 17: pb.TicketService.GetUserTickets:output_type -> pb.GetUserTicketsResponse
+	10, // 18: pb.TicketService.GetSupportTickets:output_type -> pb.GetSupportTicketsResponse
+	12, // 19: pb.TicketService.GetTicketsWithStatus:output_type -> pb.GetTicketsWithStatusResponse
+	14, // 20: pb.TicketService.ChangeTicketStatus:output_type -> pb.ChangeTicketStatusResponse
+	16, // 21: pb.TicketService.AnswerTicket:output_type -> pb.AnswerTicketResponse
+	18, // 22: pb.TicketService.TransferTicket:output_type -> pb.TransferTicketResponse
+	14, // [14:23] is the sub-list for method output_type
+	5,  // [5:14] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_contract_proto_init() }
@@ -416,13 +1270,14 @@ func file_contract_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_contract_proto_rawDesc), len(file_contract_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   6,
+			NumEnums:      1,
+			NumMessages:   19,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_contract_proto_goTypes,
 		DependencyIndexes: file_contract_proto_depIdxs,
+		EnumInfos:         file_contract_proto_enumTypes,
 		MessageInfos:      file_contract_proto_msgTypes,
 	}.Build()
 	File_contract_proto = out.File

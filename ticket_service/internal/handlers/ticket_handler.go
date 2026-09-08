@@ -19,18 +19,18 @@ func NewTicketHandler(ticketService *services.TicketService) *TicketHandler {
 }
 
 func (h *TicketHandler) NewTicket(ctx context.Context, in *pb.NewTicketRequest) (*pb.NewTicketResponse, error) {
-	ticketID, err := h.ticketService.CreateTicket(ctx, in.UserID, in.Body)
+	ticketID, err := h.ticketService.CreateTicket(ctx, in.UserId, in.Body)
 	if err != nil {
 		return &pb.NewTicketResponse{
 			Success:  false,
 			Error:    err.Error(),
-			TicketID: "",
+			TicketId: "",
 		}, err
 	}
 
 	return &pb.NewTicketResponse{
 		Success:  true,
 		Error:    "",
-		TicketID: ticketID.String(),
+		TicketId: ticketID.String(),
 	}, nil
 }
