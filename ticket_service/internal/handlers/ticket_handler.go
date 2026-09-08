@@ -31,6 +31,6 @@ func (h *TicketHandler) NewTicket(ctx context.Context, in *pb.NewTicketRequest) 
 	return &pb.NewTicketResponse{
 		Success:  true,
 		Error:    "",
-		TicketID: ticketID,
+		TicketID: ticketID.String(),
 	}, nil
 }

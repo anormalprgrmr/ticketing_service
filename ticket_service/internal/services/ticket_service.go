@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"ticket_service/internal/repositories"
+	"uuid"
 )
 
 type TicketService struct {
@@ -15,9 +16,12 @@ func NewTicketService(ticketRepo *repositories.TicketRepo) *TicketService {
 	}
 }
 
-func (s *TicketService) CreateTicket(ctx context.Context, userID string, body string) (ticketID string, err error) {
+func (s *TicketService) CreateTicket(ctx context.Context, userID string, body string) (ticketID uuid.UUID, err error) {
 
 	ticket, err := s.ticketRepo.NewTicket(ctx, userID, body)
+	if err != nil {
+		return uuid.Nil(), err
+	}
 
 	return ticket.ID, err
 }

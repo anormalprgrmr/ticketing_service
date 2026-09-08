@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"ticket_service/internal/repositories"
+	"uuid"
 )
 
 type SupportService struct {
@@ -15,9 +16,12 @@ func NewSupportService(supportRepo *repositories.SupportRepo) *SupportService {
 	}
 }
 
-func (s *SupportService) CreateSupport(ctx context.Context, name string) (supportID string, err error) {
+func (s *SupportService) CreateSupport(ctx context.Context, name string) (supportID uuid.UUID, err error) {
 
 	supportID, err = s.supportRepo.CreateSupport(ctx, name)
+	if err != nil {
+		return uuid.Nil(), err
+	}
 
 	return supportID, err
 }

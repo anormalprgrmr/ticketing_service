@@ -30,7 +30,7 @@ func (h *SupportHandler) NewSupport(ctx context.Context, req *pb.NewSupportReque
 	return &pb.NewSupportResponse{
 		Success:   true,
 		Error:     "",
-		SupportID: supportID,
+		SupportID: supportID.String(),
 	}, nil
 
 }

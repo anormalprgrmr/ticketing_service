@@ -3,6 +3,7 @@ package repositories
 import (
 	"context"
 	"ticket_service/internal/models"
+	"uuid"
 
 	"github.com/jmoiron/sqlx"
 	log "github.com/sirupsen/logrus"
@@ -18,15 +19,15 @@ func NewSupportRepo(dbConn *sqlx.DB) *SupportRepo {
 	}
 }
 
-func (r *SupportRepo) CreateSupport(ctx context.Context, name string) (supportID string, err error) {
+func (r *SupportRepo) CreateSupport(ctx context.Context, name string) (supportID uuid.UUID, err error) {
 	var support models.Support
 
 	err = r.dbConn.GetContext(ctx, &support, "INSERT INTO supports (name) VALUES ($1) RETURNING *", name)
 	if err != nil {
-		return "", err
+		return uuid.Nil(), err
 	}
 
-ص	log.Debugf("inserted in DB : %v", support)
+	log.Debugf("inserted in DB : %v", support)
 
 	return support.ID, nil
 }

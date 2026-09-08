@@ -30,6 +30,6 @@ func (h *UserHandler) NewUser(ctx context.Context, in *pb.NewUserRequest) (*pb.N
 	return &pb.NewUserResponse{
 		Success: true,
 		Error:   "",
-		UserID:  userID,
+		UserID:  userID.String(),
 	}, nil
 }

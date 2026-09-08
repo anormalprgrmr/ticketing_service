@@ -3,6 +3,7 @@ package services
 import (
 	"context"
 	"ticket_service/internal/repositories"
+	"uuid"
 )
 
 type UserService struct {
@@ -15,11 +16,11 @@ func NewUserService(userRepo *repositories.UserRepo) *UserService {
 	}
 }
 
-func (s *UserService) CreateUser(ctx context.Context, name string) (userID string, err error) {
+func (s *UserService) CreateUser(ctx context.Context, name string) (userID uuid.UUID, err error) {
 
 	user, err := s.userRepo.CreateUser(ctx, name)
 	if err != nil {
-		return "", err
+		return uuid.Nil(), err
 	}
 
 	return user.ID, nil
