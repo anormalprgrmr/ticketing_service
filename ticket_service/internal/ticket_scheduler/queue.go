@@ -2,57 +2,57 @@ package ticketscheduler
 
 import (
 	"errors"
-	"ticket_service/internal/models"
 )
 
 var ErrEmpty = errors.New("queue is empty")
 
-type Queue struct {
-	items []models.Ticket
+type Queue[T any] struct {
+	items []T
 	head  int
 	size  int
 }
 
-func NewQueue(capacity int) *Queue {
+func NewQueue[T any](capacity int) *Queue[T] {
 	if capacity < 1 {
 		capacity = 16
 	}
 
-	return &Queue{
-		items: make([]models.Ticket, capacity),
+	return &Queue[T]{
+		items: make([]T, capacity),
 	}
 }
 
-func (q *Queue) Len() int {
+func (q *Queue[T]) Len() int {
 	return q.size
 }
 
-func (q *Queue) Cap() int {
+func (q *Queue[T]) Cap() int {
 	return len(q.items)
 }
 
-func (q *Queue) IsEmpty() bool {
+func (q *Queue[T]) IsEmpty() bool {
 	return q.size == 0
 }
 
-func (q *Queue) Enqueue(ticket models.Ticket) {
+func (q *Queue[T]) Enqueue(item T) {
 	if q.size == len(q.items) {
 		q.grow()
 	}
 
 	tail := (q.head + q.size) % len(q.items)
-	q.items[tail] = ticket
+	q.items[tail] = item
 	q.size++
 }
 
-func (q *Queue) Dequeue() (models.Ticket, error) {
+func (q *Queue[T]) Dequeue() (T, error) {
+	var zero T
 	if q.size == 0 {
-		return models.Ticket{}, ErrEmpty
+		return zero, ErrEmpty
 	}
 
-	ticket := q.items[q.head]
+	item := q.items[q.head]
 
-	q.items[q.head] = models.Ticket{}
+	q.items[q.head] = zero
 
 	q.head = (q.head + 1) % len(q.items)
 	q.size--
@@ -61,24 +61,25 @@ func (q *Queue) Dequeue() (models.Ticket, error) {
 		q.head = 0
 	}
 
-	return ticket, nil
+	return item, nil
 }
 
-func (q *Queue) Peek() (models.Ticket, error) {
+func (q *Queue[T]) Peek() (T, error) {
 	if q.size == 0 {
-		return models.Ticket{}, ErrEmpty
+		var zero T
+		return zero, ErrEmpty
 	}
 
 	return q.items[q.head], nil
 }
 
-func (q *Queue) grow() {
+func (q *Queue[T]) grow() {
 	newCapacity := len(q.items) * 2
 	if newCapacity == 0 {
 		newCapacity = 16
 	}
 
-	newItems := make([]models.Ticket, newCapacity)
+	newItems := make([]T, newCapacity)
 
 	for i := 0; i < q.size; i++ {
 		index := (q.head + i) % len(q.items)
