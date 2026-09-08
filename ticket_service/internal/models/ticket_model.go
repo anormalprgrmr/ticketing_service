@@ -1,5 +1,7 @@
 package models
 
+import "uuid"
+
 type TicketStatus int
 
 const (
@@ -9,9 +11,9 @@ const (
 )
 
 type Ticket struct {
-	ID        string       `db:"id"`
-	UserID    string       `db:"user_id"`
-	SupportID string       `db:"support_id"`
+	ID        uuid.UUID    `db:"id"`
+	UserID    uuid.UUID       `db:"user_id"`
+	SupportID uuid.UUID    `db:"support_id"`
 	Body      string       `db:"body"`
 	Status    TicketStatus `db:"status"`
 }

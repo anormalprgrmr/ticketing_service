@@ -1,6 +1,8 @@
 package models
 
+import "uuid"
+
 type User struct {
-	ID   string `db:"id"`
-	Name string `db:"name"`
+	ID   uuid.UUID `db:"id"`
+	Name string    `db:"name"`
 }

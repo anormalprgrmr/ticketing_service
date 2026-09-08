@@ -26,7 +26,7 @@ func (r *SupportRepo) CreateSupport(ctx context.Context, name string) (supportID
 		return "", err
 	}
 
-	log.Debugf("inserted in DB : %v", support)
+ص	log.Debugf("inserted in DB : %v", support)
 
 	return support.ID, nil
 }
