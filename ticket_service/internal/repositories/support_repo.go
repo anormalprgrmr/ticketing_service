@@ -21,7 +21,7 @@ func NewSupportRepo(dbConn *sqlx.DB) *SupportRepo {
 func (r *SupportRepo) CreateSupport(ctx context.Context, name string) (supportID string, err error) {
 	var support models.Support
 
-	err = r.dbConn.GetContext(ctx, &support, "INSERT INTO supports (name) VALUES ($1)", name)
+	err = r.dbConn.GetContext(ctx, &support, "INSERT INTO supports (name) VALUES ($1) RETURNING *", name)
 	if err != nil {
 		return "", err
 	}
