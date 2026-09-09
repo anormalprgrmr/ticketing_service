@@ -9,6 +9,7 @@ import (
 func NewUserRouter(userHandler *handlers.UserHandler) *chi.Mux {
 
 	r := chi.NewRouter()
+
 	r.Post("/newUser", userHandler.NewUser)
 	r.Post("/newTicket", userHandler.NewTicket)
 
