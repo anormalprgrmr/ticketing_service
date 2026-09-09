@@ -6,7 +6,8 @@ import (
 )
 
 type Support struct {
-	ID                     uuid.UUID `db:"id"`
-	Name                   string    `db:"name"`
-	LastAssignedTicketTime time.Time `db:"last_assigned_ticket_time"`
+	ID                     uuid.UUID  `db:"id"`
+	Name                   string     `db:"name"`
+	CurrentTicketID        *uuid.UUID `db:"current_ticket_id"`
+	LastAssignedTicketTime time.Time  `db:"last_assigned_ticket_time"`
 }

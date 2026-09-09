@@ -1,6 +1,9 @@
 package models
 
-import "uuid"
+import (
+	"time"
+	"uuid"
+)
 
 type TicketStatus int
 
@@ -13,9 +16,10 @@ const (
 type Ticket struct {
 	ID        uuid.UUID    `db:"id"`
 	UserID    uuid.UUID    `db:"user_id"`
-	SupportID uuid.UUID    `db:"support_id"`
+	SupportID *uuid.UUID   `db:"support_id"`
 	Body      string       `db:"body"`
 	Status    TicketStatus `db:"status"`
+	CreatedAt time.Time    `db:"created_at"`
 }
 
 func TicketStatusToString(status TicketStatus) string {

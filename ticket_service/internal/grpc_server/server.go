@@ -8,6 +8,7 @@ import (
 	pb "ticket_service/internal/protos"
 	"ticket_service/internal/repositories"
 	"ticket_service/internal/services"
+	ticketscheduler "ticket_service/internal/ticket_scheduler"
 
 	"github.com/jmoiron/sqlx"
 	log "github.com/sirupsen/logrus"
@@ -22,13 +23,13 @@ type TicketServer struct {
 	pb.UnsafeTicketServiceServer
 }
 
-func StartgRPCServer(port int, dbConn *sqlx.DB) error {
+func StartgRPCServer(port int, dbConn *sqlx.DB, ts *ticketscheduler.TicketScheduler) error {
 
 	ticketRepo := repositories.NewTicketRepo(dbConn)
 	userRepo := repositories.NewUserRepo(dbConn)
 	supportRepo := repositories.NewSupportRepo(dbConn)
 
-	ticketService := services.NewTicketService(ticketRepo)
+	ticketService := services.NewTicketService(ticketRepo, ts)
 	userService := services.NewUserService(userRepo)
 	supportService := services.NewSupportService(supportRepo)
 

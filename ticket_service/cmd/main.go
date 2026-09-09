@@ -5,6 +5,7 @@ import (
 	"ticket_service/internal/config"
 	"ticket_service/internal/db"
 	grpcserver "ticket_service/internal/grpc_server"
+	ticketscheduler "ticket_service/internal/ticket_scheduler"
 )
 
 func main() {
@@ -17,6 +18,8 @@ func main() {
 
 	dbConn := db.ConnectDB(cfg.DBHost, cfg.DBPort, cfg.DBUser, cfg.DBPassword, cfg.DBName)
 
-	err = grpcserver.StartgRPCServer(cfg.Port, dbConn)
+	ts := ticketscheduler.NewTicketScheduler(dbConn)
+
+	err = grpcserver.StartgRPCServer(cfg.Port, dbConn, ts)
 
 }

@@ -4,16 +4,19 @@ import (
 	"context"
 	"ticket_service/internal/models"
 	"ticket_service/internal/repositories"
+	ticketscheduler "ticket_service/internal/ticket_scheduler"
 	"uuid"
 )
 
 type TicketService struct {
-	ticketRepo *repositories.TicketRepo
+	ticketRepo      *repositories.TicketRepo
+	ticketScheduler *ticketscheduler.TicketScheduler
 }
 
-func NewTicketService(ticketRepo *repositories.TicketRepo) *TicketService {
+func NewTicketService(ticketRepo *repositories.TicketRepo, ts *ticketscheduler.TicketScheduler) *TicketService {
 	return &TicketService{
-		ticketRepo: ticketRepo,
+		ticketRepo:      ticketRepo,
+		ticketScheduler: ts,
 	}
 }
 
@@ -23,6 +26,8 @@ func (s *TicketService) CreateTicket(ctx context.Context, userID string, body st
 	if err != nil {
 		return uuid.Nil(), err
 	}
+
+	s.ticketScheduler.Trigger(ctx)
 
 	return ticket.ID, err
 }
@@ -43,6 +48,8 @@ func (s *TicketService) CloseTicket(ctx context.Context, ticketId, supportID str
 	if err != nil {
 		return err
 	}
+
+	s.ticketScheduler.Trigger(ctx)
 
 	return err
 }

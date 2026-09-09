@@ -3,6 +3,8 @@ module ticket_service
 go 1.27.1
 
 require (
+	github.com/jmoiron/sqlx v1.4.0
+	github.com/lib/pq v1.12.3
 	github.com/sirupsen/logrus v1.10.2
 	google.golang.org/grpc v1.83.2
 	google.golang.org/protobuf v1.36.12
@@ -10,8 +12,6 @@ require (
 )
 
 require (
-	github.com/jmoiron/sqlx v1.4.0 // indirect
-	github.com/lib/pq v1.12.3 // indirect
 	golang.org/x/net v0.58.0 // indirect
 	golang.org/x/sys v0.47.0 // indirect
 	golang.org/x/text v0.41.0 // indirect

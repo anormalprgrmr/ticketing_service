@@ -1,0 +1,1 @@
+ALTER TABLE supports DROP COLUMN current_ticket_id;

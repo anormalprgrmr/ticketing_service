@@ -19,14 +19,21 @@ func NewTicketRepo(dbConn *sqlx.DB) *TicketRepo {
 
 func (r *TicketRepo) NewTicket(ctx context.Context, userID, body string) (*models.Ticket, error) {
 	var ticket models.Ticket
-	r.dbConn.GetContext(ctx, &ticket, "INSERT INTO tickets(user_id,body) VALUES ($1,$2)", userID, body)
+	err := r.dbConn.GetContext(ctx, &ticket, "INSERT INTO tickets(user_id,body) VALUES ($1,$2) RETURNING *", userID, body)
+	if err != nil {
+		return nil, err
+	}
 
 	return &ticket, nil
 }
 
 func (r *TicketRepo) GetTicketsWithStatus(ctx context.Context, status string) ([]models.Ticket, error) {
 	var tickets []models.Ticket
-	r.dbConn.SelectContext(ctx, &tickets, "SELECT * FROM tickets WHERE status=$1", status)
+	err := r.dbConn.SelectContext(ctx, &tickets, "SELECT * FROM tickets WHERE status=$1", status)
+	if err != nil {
+		return nil, err
+	}
+
 	return nil, nil
 }
 
