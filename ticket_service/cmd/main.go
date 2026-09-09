@@ -1,14 +1,16 @@
 package main
 
 import (
-	"log"
 	"ticket_service/internal/config"
 	"ticket_service/internal/db"
 	grpcserver "ticket_service/internal/grpc_server"
 	ticketscheduler "ticket_service/internal/ticket_scheduler"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
+	log.Info("Starting ticket App...")
 	cfg := config.NewConfig()
 
 	err := config.InitLogger(cfg.LogLevel)

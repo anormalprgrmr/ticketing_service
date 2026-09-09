@@ -26,9 +26,11 @@ func InitLogger(logLevel logrus.Level) error {
 	}
 
 	log.SetOutput(io.MultiWriter(fileLogger, os.Stdout))
-	log.SetLevel(log.InfoLevel)
 	log.SetFormatter(&log.TextFormatter{
-		FullTimestamp: true,
+		FullTimestamp:          true,
+		TimestampFormat:        "2006-01-02 15:04:05",
+		ForceColors:            true,
+		DisableLevelTruncation: true,
 	})
 
 	log.SetLevel(logLevel)
