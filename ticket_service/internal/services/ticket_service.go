@@ -34,7 +34,7 @@ func (s *TicketService) CreateTicket(ctx context.Context, userID string, body st
 
 func (s *TicketService) GetTicketsWithStatus(ctx context.Context, status models.TicketStatus) ([]models.Ticket, error) {
 
-	tickets, err := s.ticketRepo.GetTicketsWithStatus(ctx, models.TicketStatusToString(status))
+	tickets, err := s.ticketRepo.GetTicketsWithStatus(ctx, string(status))
 	if err != nil {
 		return nil, err
 	}

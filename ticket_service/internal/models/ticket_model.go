@@ -5,12 +5,12 @@ import (
 	"uuid"
 )
 
-type TicketStatus int
+type TicketStatus string
 
 const (
-	Opened TicketStatus = iota
-	Answered
-	Closed
+	Opened   TicketStatus = "Opened"
+	Answered TicketStatus = "Answered"
+	Closed   TicketStatus = "Closed"
 )
 
 type Ticket struct {
@@ -20,17 +20,4 @@ type Ticket struct {
 	Body      string       `db:"body"`
 	Status    TicketStatus `db:"status"`
 	CreatedAt time.Time    `db:"created_at"`
-}
-
-func TicketStatusToString(status TicketStatus) string {
-	switch status {
-	case Opened:
-		return "Opened"
-	case Answered:
-		return "Answered"
-	case Closed:
-		return "Closed"
-	}
-
-	return ""
 }
