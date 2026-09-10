@@ -1,6 +1,10 @@
 package main
 
 import (
+	"context"
+	"os"
+	"os/signal"
+	"syscall"
 	"ticket_service/internal/config"
 	"ticket_service/internal/db"
 	"ticket_service/internal/event"
@@ -12,6 +16,14 @@ import (
 
 func main() {
 	log.Info("Starting ticket App...")
+
+	ctx, stop := signal.NotifyContext(
+		context.Background(),
+		os.Interrupt,
+		syscall.SIGTERM,
+	)
+	defer stop()
+
 	cfg := config.NewConfig()
 
 	err := config.InitLogger(cfg.LogLevel)
@@ -23,7 +35,12 @@ func main() {
 
 	eb := event.NewChannelSignalBus()
 
-	ticketscheduler.NewTicketScheduler(dbConn, eb)
+	ts := ticketscheduler.NewTicketScheduler(dbConn, eb)
+
+	err = ts.Start(ctx)
+	if err != nil {
+		log.Fatalf("couldnt start tickerScheduler : %e", err)
+	}
 
 	err = grpcserver.StartgRPCServer(cfg.Port, dbConn, eb)
 

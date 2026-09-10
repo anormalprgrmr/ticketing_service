@@ -2,9 +2,12 @@ package ticketscheduler
 
 import (
 	"context"
+	"database/sql"
+	"errors"
 	"sync"
 	"ticket_service/internal/event"
 	"ticket_service/internal/models"
+	"time"
 
 	"github.com/jmoiron/sqlx"
 	log "github.com/sirupsen/logrus"
@@ -27,13 +30,23 @@ func NewTicketScheduler(dbConn *sqlx.DB, eb event.EventSignalBus) *TicketSchedul
 }
 
 func (ts *TicketScheduler) Start(ctx context.Context) error {
+	// Recover all existing/unprocessed work first.
+	if err := ts.syncAll(ctx); err != nil {
+		return err
+	}
 
 	go func() {
-		for range ts.eb.Subscribe() {
-			log.Debugf("🦓🦓 an event triggered the scheduler ...")
-			updateErr := ts.updateScheduler(ctx)
-			if updateErr != nil {
-				log.Errorf("error updating scheduler: %v", updateErr)
+		for {
+			select {
+			case <-ctx.Done():
+				return
+
+			case <-ts.eb.Subscribe():
+				log.Debug("🦓🦓 event triggered the scheduler")
+
+				if _, err := ts.updateScheduler(ctx); err != nil {
+					log.Errorf("error updating scheduler: %v", err)
+				}
 			}
 		}
 	}()
@@ -41,40 +54,87 @@ func (ts *TicketScheduler) Start(ctx context.Context) error {
 	return nil
 }
 
-func (ts *TicketScheduler) updateScheduler(ctx context.Context) error {
-	ts.mutex.Lock()
-	defer ts.mutex.Unlock()
+func (ts *TicketScheduler) updateScheduler(ctx context.Context) (bool, error) {
+	ctx, cancel := context.WithTimeout(ctx, 2*time.Second)
+	defer cancel()
 
 	tx, err := ts.dbConn.BeginTxx(ctx, nil)
 	if err != nil {
-		return err
+		return false, err
 	}
-
 	defer tx.Rollback()
 
 	var support models.Support
-	err = tx.GetContext(ctx, &support, "SELECT * FROM supports WHERE current_ticket_id IS NULL ORDER BY last_assigned_ticket_time LIMIT 1 ")
+	err = tx.GetContext(
+		ctx,
+		&support,
+		`SELECT *
+         FROM supports
+         WHERE current_ticket_id IS NULL
+         ORDER BY last_assigned_ticket_time
+         LIMIT 1`,
+	)
 	if err != nil {
-		return err
+		if errors.Is(err, sql.ErrNoRows) {
+			return false, nil
+		}
+		return false, err
 	}
-	log.Debugf("support: %v", support)
 
 	var ticket models.Ticket
-	err = tx.GetContext(ctx, &ticket, "SELECT * FROM tickets WHERE support_id IS NULL AND status='Opened' ORDER BY created_at LIMIT 1 ")
+	err = tx.GetContext(
+		ctx,
+		&ticket,
+		`SELECT *
+         FROM tickets
+         WHERE support_id IS NULL
+           AND status = 'Opened'
+         ORDER BY created_at
+         LIMIT 1`,
+	)
 	if err != nil {
-		return err
+		if errors.Is(err, sql.ErrNoRows) {
+			return false, nil
+		}
+		return false, err
 	}
-	log.Debugf("ticket: %v", ticket)
 
-	_, err = tx.ExecContext(ctx, "UPDATE tickets SET support_id=$1 where id=$2", support.ID, ticket.ID)
+	_, err = tx.ExecContext(
+		ctx,
+		`UPDATE tickets SET support_id = $1 WHERE id = $2`,
+		support.ID,
+		ticket.ID,
+	)
 	if err != nil {
-		return err
+		return false, err
 	}
 
-	_, err = tx.ExecContext(ctx, "UPDATE supports SET current_ticket_id=$1 where id=$2", ticket.ID, support.ID)
+	_, err = tx.ExecContext(
+		ctx,
+		`UPDATE supports SET current_ticket_id = $1 WHERE id = $2`,
+		ticket.ID,
+		support.ID,
+	)
 	if err != nil {
-		return err
+		return false, err
 	}
 
-	return tx.Commit()
+	if err := tx.Commit(); err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+func (ts *TicketScheduler) syncAll(ctx context.Context) error {
+	for {
+		updated, err := ts.updateScheduler(ctx)
+		if err != nil {
+			return err
+		}
+
+		if !updated {
+			return nil
+		}
+	}
 }
