@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	pb "gateway/internal/protos"
 	"log"
 	"net/http"
@@ -71,9 +72,7 @@ func (h *AdminHandler) GetTicketsWithStatus(w http.ResponseWriter, r *http.Reque
 	case "closed":
 		status = pb.TicketStatus_TICKET_STATUS_CLOSED
 	default:
-		log.Printf("wrong status typee")
-		w.WriteHeader(http.StatusBadRequest)
-		cancel()
+		writeGRPCError(w, errors.New("undefined ticket status"))
 		return
 	}
 
@@ -81,22 +80,11 @@ func (h *AdminHandler) GetTicketsWithStatus(w http.ResponseWriter, r *http.Reque
 
 	res, err := h.grpcClient.GetTicketsWithStatus(ctx, &req)
 	if err != nil {
-		log.Printf("error while calling rpc: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		cancel()
-		return
-	}
-	log.Printf("response is => %v", res)
-
-	resByte, err := protojson.Marshal(res)
-	if err != nil {
-		log.Printf("error while converting proto to json : %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		cancel()
+		writeGRPCError(w, err)
 		return
 	}
 
-	w.Write(resByte)
+	writeProtoJSON(w, http.StatusOK, res)
 
 }
 
@@ -116,20 +104,9 @@ func (h *AdminHandler) TransferTicket(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("error while calling rpc: %v", err)
 		w.WriteHeader(http.StatusInternalServerError)
-		cancel()
 		return
 	}
 
-	log.Printf("response is => %v", res)
-
-	resByte, err := protojson.Marshal(res)
-	if err != nil {
-		log.Printf("error while converting proto to json : %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		cancel()
-		return
-	}
-
-	w.Write(resByte)
+	writeProtoJSON(w, http.StatusOK, res)
 
 }

@@ -4,12 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	pb "gateway/internal/protos"
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/go-chi/chi/v5"
-	"google.golang.org/protobuf/encoding/protojson"
 )
 
 type UserHandler struct {
@@ -23,76 +21,49 @@ func NewUserHandler(grpcClient pb.TicketServiceClient) *UserHandler {
 }
 
 func (h *UserHandler) NewTicket(w http.ResponseWriter, r *http.Request) {
-	log.Println("Start sending gRPC req")
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
 	defer cancel()
 
 	var req pb.NewTicketRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		writeGRPCError(w, err)
 		return
 	}
 
 	res, err := h.grpcClient.NewTicket(ctx, &req)
 	if err != nil {
-		log.Printf("error while calling rpc: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		cancel()
+		writeGRPCError(w, err)
 		return
 	}
 
-	log.Printf("response is => %v", res)
-
-	resByte, err := protojson.Marshal(res)
-	if err != nil {
-		log.Printf("error while converting proto to json : %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		cancel()
-		return
-	}
-
-	w.Write(resByte)
+	writeProtoJSON(w, http.StatusOK, res)
 
 }
 
 func (h *UserHandler) NewUser(w http.ResponseWriter, r *http.Request) {
-	log.Println("Start sending gRPC req")
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
 	defer cancel()
 
 	var req pb.NewUserRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
+		writeGRPCError(w, err)
 		return
 	}
 
 	res, err := h.grpcClient.NewUser(ctx, &req)
 	if err != nil {
-		log.Printf("error while calling rpc: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		cancel()
+		writeGRPCError(w, err)
 		return
 	}
 
-	log.Printf("response is => %v", res)
-
-	resByte, err := protojson.Marshal(res)
-	if err != nil {
-		log.Printf("error while converting proto to json : %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		cancel()
-		return
-	}
-
-	w.Write(resByte)
+	writeProtoJSON(w, http.StatusOK, res)
 
 }
 
 func (h *UserHandler) GetUserTickets(w http.ResponseWriter, r *http.Request) {
-	log.Println("Start sending gRPC req")
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
 	defer cancel()
 
 	userID := chi.URLParam(r, "userID")
@@ -100,22 +71,10 @@ func (h *UserHandler) GetUserTickets(w http.ResponseWriter, r *http.Request) {
 
 	res, err := h.grpcClient.GetUserTickets(ctx, &req)
 	if err != nil {
-		log.Printf("error while calling rpc: %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		cancel()
+		writeGRPCError(w, err)
 		return
 	}
 
-	log.Printf("response is => %v", res)
-
-	resByte, err := protojson.Marshal(res)
-	if err != nil {
-		log.Printf("error while converting proto to json : %v", err)
-		w.WriteHeader(http.StatusInternalServerError)
-		cancel()
-		return
-	}
-
-	w.Write(resByte)
+	writeProtoJSON(w, http.StatusOK, res)
 
 }

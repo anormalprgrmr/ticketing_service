@@ -2,6 +2,7 @@ package routers
 
 import (
 	"gateway/internal/handlers"
+	"gateway/internal/middlewares"
 	pb "gateway/internal/protos"
 
 	"github.com/go-chi/chi/v5"
@@ -17,7 +18,7 @@ func InitRouter(client pb.TicketServiceClient) *chi.Mux {
 	r.Use(middleware.Heartbeat("/ping"))
 	r.Use(middleware.CleanPath)
 
-	r.Use(middleware.Logger)
+	r.Use(middlewares.CustomLogger)
 
 	r.Mount("/api/user", NewUserRouter(userHandler))
 	r.Mount("/api/support", NewSupportRouter(supportHandler))
