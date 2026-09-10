@@ -4,11 +4,11 @@ import (
 	"database/sql"
 	"fmt"
 	"net"
+	"ticket_service/internal/event"
 	"ticket_service/internal/handlers"
 	pb "ticket_service/internal/protos"
 	"ticket_service/internal/repositories"
 	"ticket_service/internal/services"
-	ticketscheduler "ticket_service/internal/ticket_scheduler"
 
 	"github.com/jmoiron/sqlx"
 	log "github.com/sirupsen/logrus"
@@ -23,13 +23,13 @@ type TicketServer struct {
 	pb.UnsafeTicketServiceServer
 }
 
-func StartgRPCServer(port int, dbConn *sqlx.DB, ts *ticketscheduler.TicketScheduler) error {
+func StartgRPCServer(port int, dbConn *sqlx.DB, eb event.EventSignalBus) error {
 
 	ticketRepo := repositories.NewTicketRepo(dbConn)
 	userRepo := repositories.NewUserRepo(dbConn)
 	supportRepo := repositories.NewSupportRepo(dbConn)
 
-	ticketService := services.NewTicketService(ticketRepo, ts)
+	ticketService := services.NewTicketService(ticketRepo, eb)
 	userService := services.NewUserService(userRepo)
 	supportService := services.NewSupportService(supportRepo)
 

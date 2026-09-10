@@ -2,23 +2,21 @@ package services
 
 import (
 	"context"
+	"ticket_service/internal/event"
 	"ticket_service/internal/models"
 	"ticket_service/internal/repositories"
-	ticketscheduler "ticket_service/internal/ticket_scheduler"
 	"uuid"
-
-	log "github.com/sirupsen/logrus"
 )
 
 type TicketService struct {
-	ticketRepo      *repositories.TicketRepo
-	ticketScheduler *ticketscheduler.TicketScheduler
+	ticketRepo *repositories.TicketRepo
+	eb         event.EventSignalBus
 }
 
-func NewTicketService(ticketRepo *repositories.TicketRepo, ts *ticketscheduler.TicketScheduler) *TicketService {
+func NewTicketService(ticketRepo *repositories.TicketRepo, eb event.EventSignalBus) *TicketService {
 	return &TicketService{
-		ticketRepo:      ticketRepo,
-		ticketScheduler: ts,
+		ticketRepo: ticketRepo,
+		eb:         eb,
 	}
 }
 
@@ -29,8 +27,7 @@ func (s *TicketService) CreateTicket(ctx context.Context, userID string, body st
 		return uuid.Nil(), err
 	}
 
-	err = s.ticketScheduler.Trigger(ctx)
-	log.Infof("error triggering scheduler: %e", err)
+	s.eb.Publish()
 
 	return ticket.ID, err
 }
@@ -52,8 +49,7 @@ func (s *TicketService) CloseTicket(ctx context.Context, ticketId, supportID str
 		return err
 	}
 
-	err = s.ticketScheduler.Trigger(ctx)
-	log.Infof("error triggering scheduler: %e", err)
+	s.eb.Publish()
 
 	return err
 }

@@ -3,6 +3,7 @@ package ticketscheduler
 import (
 	"context"
 	"sync"
+	"ticket_service/internal/event"
 	"ticket_service/internal/models"
 
 	"github.com/jmoiron/sqlx"
@@ -13,18 +14,34 @@ type TicketScheduler struct {
 	mutex       sync.Mutex
 	ticketQueue Queue[models.Ticket]
 	dbConn      *sqlx.DB
+	eb          event.EventSignalBus
 }
 
-func NewTicketScheduler(dbConn *sqlx.DB) *TicketScheduler {
+func NewTicketScheduler(dbConn *sqlx.DB, eb event.EventSignalBus) *TicketScheduler {
 	return &TicketScheduler{
 		mutex:       sync.Mutex{},
 		ticketQueue: Queue[models.Ticket]{},
 		dbConn:      dbConn,
+		eb:          eb,
 	}
 }
 
-func (ts *TicketScheduler) Trigger(ctx context.Context) error {
-	log.Debugf("🦓🦓 an event triggered the scheduler ...")
+func (ts *TicketScheduler) Start(ctx context.Context) error {
+
+	go func() {
+		for range ts.eb.Subscribe() {
+			log.Debugf("🦓🦓 an event triggered the scheduler ...")
+			updateErr := ts.updateScheduler(ctx)
+			if updateErr != nil {
+				log.Errorf("error updating scheduler: %v", updateErr)
+			}
+		}
+	}()
+
+	return nil
+}
+
+func (ts *TicketScheduler) updateScheduler(ctx context.Context) error {
 	ts.mutex.Lock()
 	defer ts.mutex.Unlock()
 

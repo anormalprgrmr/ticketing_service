@@ -3,6 +3,7 @@ package main
 import (
 	"ticket_service/internal/config"
 	"ticket_service/internal/db"
+	"ticket_service/internal/event"
 	grpcserver "ticket_service/internal/grpc_server"
 	ticketscheduler "ticket_service/internal/ticket_scheduler"
 
@@ -20,8 +21,10 @@ func main() {
 
 	dbConn := db.ConnectDB(cfg.DBHost, cfg.DBPort, cfg.DBUser, cfg.DBPassword, cfg.DBName)
 
-	ts := ticketscheduler.NewTicketScheduler(dbConn)
+	eb := event.NewChannelSignalBus()
 
-	err = grpcserver.StartgRPCServer(cfg.Port, dbConn, ts)
+	ticketscheduler.NewTicketScheduler(dbConn, eb)
+
+	err = grpcserver.StartgRPCServer(cfg.Port, dbConn, eb)
 
 }

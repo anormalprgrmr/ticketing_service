@@ -73,7 +73,7 @@ services:
     ports:
       - "9090:9090"
     volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yml:ro
       - prometheus_data:/prometheus
     depends_on:
       - cadvisor
