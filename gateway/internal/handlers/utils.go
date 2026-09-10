@@ -19,7 +19,7 @@ func writeProtoJSON(w http.ResponseWriter, status int, msg proto.Message) {
 		return
 	}
 
-	log.Printf("gRPC RESPONSE reqID=%v response=%v", data)
+	log.Printf("gRPC RESPONSE response=%v", msg)
 
 	w.WriteHeader(status)
 	_, _ = w.Write(data)

@@ -6,6 +6,8 @@ import (
 	"ticket_service/internal/repositories"
 	ticketscheduler "ticket_service/internal/ticket_scheduler"
 	"uuid"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type TicketService struct {
@@ -27,7 +29,8 @@ func (s *TicketService) CreateTicket(ctx context.Context, userID string, body st
 		return uuid.Nil(), err
 	}
 
-	s.ticketScheduler.Trigger(ctx)
+	err = s.ticketScheduler.Trigger(ctx)
+	log.Infof("error triggering scheduler: %e", err)
 
 	return ticket.ID, err
 }
@@ -49,7 +52,8 @@ func (s *TicketService) CloseTicket(ctx context.Context, ticketId, supportID str
 		return err
 	}
 
-	s.ticketScheduler.Trigger(ctx)
+	err = s.ticketScheduler.Trigger(ctx)
+	log.Infof("error triggering scheduler: %e", err)
 
 	return err
 }
