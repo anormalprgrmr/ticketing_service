@@ -32,7 +32,7 @@ func (s *TicketService) CreateTicket(ctx context.Context, userID string, body st
 	return ticket.ID, err
 }
 
-func (s *TicketService) GetTicketsWithStatus(ctx context.Context, status models.TicketStatus) ([]models.Ticket, error) {
+func (s *TicketService) GetTicketsWithStatus(ctx context.Context, status models.TicketStatus) ([]*models.Ticket, error) {
 
 	tickets, err := s.ticketRepo.GetTicketsWithStatus(ctx, string(status))
 	if err != nil {

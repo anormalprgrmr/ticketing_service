@@ -31,7 +31,7 @@ func StartgRPCServer(port int, dbConn *sqlx.DB, eb event.EventSignalBus) error {
 
 	ticketService := services.NewTicketService(ticketRepo, eb)
 	userService := services.NewUserService(userRepo)
-	supportService := services.NewSupportService(supportRepo)
+	supportService := services.NewSupportService(supportRepo, eb)
 
 	ticketHandler := handlers.NewTicketHandler(ticketService)
 	userHandler := handlers.NewUserHandler(userService)

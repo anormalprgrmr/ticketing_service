@@ -500,6 +500,8 @@ func (x *GetUserTicketsResponse) GetTickets() []*Ticket {
 type GetSupportTicketsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SupportId     string                 `protobuf:"bytes,1,opt,name=support_id,json=supportId,proto3" json:"support_id,omitempty"`
+	PageSize      int64                  `protobuf:"varint,2,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"`
+	PageNum       int64                  `protobuf:"varint,3,opt,name=page_num,json=pageNum,proto3" json:"page_num,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -539,6 +541,20 @@ func (x *GetSupportTicketsRequest) GetSupportId() string {
 		return x.SupportId
 	}
 	return ""
+}
+
+func (x *GetSupportTicketsRequest) GetPageSize() int64 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+func (x *GetSupportTicketsRequest) GetPageNum() int64 {
+	if x != nil {
+		return x.PageNum
+	}
+	return 0
 }
 
 type GetSupportTicketsResponse struct {
@@ -1132,10 +1148,12 @@ const file_contract_proto_rawDesc = "" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05error\x18\x02 \x01(\tR\x05error\x12$\n" +
 	"\atickets\x18\x03 \x03(\v2\n" +
-	".pb.TicketR\atickets\"9\n" +
+	".pb.TicketR\atickets\"q\n" +
 	"\x18GetSupportTicketsRequest\x12\x1d\n" +
 	"\n" +
-	"support_id\x18\x01 \x01(\tR\tsupportId\"q\n" +
+	"support_id\x18\x01 \x01(\tR\tsupportId\x12\x1b\n" +
+	"\tpage_size\x18\x02 \x01(\x03R\bpageSize\x12\x19\n" +
+	"\bpage_num\x18\x03 \x01(\x03R\apageNum\"q\n" +
 	"\x19GetSupportTicketsResponse\x12\x18\n" +
 	"\asuccess\x18\x01 \x01(\bR\asuccess\x12\x14\n" +
 	"\x05error\x18\x02 \x01(\tR\x05error\x12$\n" +

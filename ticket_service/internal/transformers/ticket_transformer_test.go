@@ -105,7 +105,7 @@ func TestTicketModelToGRPC(t *testing.T) {
 	var userID2 uuid.UUID
 	var supportID2 uuid.UUID
 
-	tickets := []models.Ticket{
+	tickets := []*models.Ticket{
 		{
 			ID:        id1,
 			UserID:    userID1,

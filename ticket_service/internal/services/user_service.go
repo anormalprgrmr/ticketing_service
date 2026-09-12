@@ -27,7 +27,7 @@ func (s *UserService) CreateUser(ctx context.Context, name string) (userID uuid.
 	return user.ID, nil
 }
 
-func (s *UserService) GetUserTickets(ctx context.Context, userID string) ([]models.Ticket, error) {
+func (s *UserService) GetUserTickets(ctx context.Context, userID string) ([]*models.Ticket, error) {
 
 	tickets, err := s.userRepo.GetUserTickets(ctx, userID)
 	if err != nil {

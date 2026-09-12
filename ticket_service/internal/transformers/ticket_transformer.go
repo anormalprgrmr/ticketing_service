@@ -5,15 +5,22 @@ import (
 	pb "ticket_service/internal/protos"
 )
 
-func TicketModelToGRPC(tickets []models.Ticket) []*pb.Ticket {
+func TicketModelToGRPC(tickets []*models.Ticket) []*pb.Ticket {
 
 	pbTickets := make([]*pb.Ticket, 0)
 
 	for _, ticket := range tickets {
+		var supportID string
+		if ticket.SupportID != nil {
+			supportID = ticket.SupportID.String()
+		} else {
+			supportID = ""
+		}
+
 		pbTickets = append(pbTickets, &pb.Ticket{
 			Id:        ticket.ID.String(),
 			UserId:    ticket.UserID.String(),
-			SupportId: ticket.SupportID.String(),
+			SupportId: supportID,
 			Body:      ticket.Body,
 			Status:    ConvertTicketStatusModelToGRPC(ticket.Status),
 		})

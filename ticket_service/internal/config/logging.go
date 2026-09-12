@@ -11,7 +11,7 @@ import (
 )
 
 func InitLogger(logLevel logrus.Level) error {
-	logDir := "/tmp/newcash/gateway"
+	logDir := "/tmp/newcash/ticket"
 
 	if err := os.MkdirAll(logDir, 0755); err != nil {
 		return err

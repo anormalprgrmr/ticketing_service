@@ -32,10 +32,29 @@ func (r *SupportRepo) CreateSupport(ctx context.Context, name string) (supportID
 	return support.ID, nil
 }
 
-func (r *SupportRepo) GetSupportTickets(ctx context.Context, supportID string) (supportTickets []models.Ticket, err error) {
-	var tickets []models.Ticket
+func (r *SupportRepo) GetSupportTickets(
+	ctx context.Context,
+	supportID string,
+	pageSize,
+	pageNum int64,
+) ([]*models.Ticket, error) {
+	var tickets []*models.Ticket
 
-	err = r.dbConn.SelectContext(ctx, &tickets, "SELECT * FROM tickets WHERE support_id = $1", supportID)
+	err := r.dbConn.SelectContext(
+		ctx,
+		&tickets,
+		`
+			SELECT *
+			FROM tickets
+			WHERE support_id = $1
+			ORDER BY created_at DESC
+			LIMIT $2 OFFSET $3
+		`,
+		supportID,
+		pageSize,
+		pageNum,
+	)
+
 	if err != nil {
 		return nil, err
 	}

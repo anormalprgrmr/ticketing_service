@@ -5,8 +5,6 @@ import (
 	pb "ticket_service/internal/protos"
 	"ticket_service/internal/services"
 	"ticket_service/internal/transformers"
-
-	"github.com/sirupsen/logrus"
 )
 
 type SupportHandler struct {
@@ -40,17 +38,14 @@ func (h *SupportHandler) NewSupport(ctx context.Context, req *pb.NewSupportReque
 
 func (h *SupportHandler) GetSupportTickets(ctx context.Context, req *pb.GetSupportTicketsRequest) (*pb.GetSupportTicketsResponse, error) {
 
-	tickets, err := h.supportService.GetSupportTickets(ctx, req.SupportId)
+	tickets, err := h.supportService.GetSupportTickets(ctx, req.SupportId, req.PageSize, req.PageNum)
 	if err != nil {
 		return &pb.GetSupportTicketsResponse{
 			Success: false,
 			Error:   err.Error(),
-			Tickets: transformers.TicketModelToGRPC(tickets),
+			Tickets: nil,
 		}, err
 	}
-
-	logrus.Infof("grpc : %v", tickets)
-	logrus.Infof("model : %v", transformers.TicketModelToGRPC(tickets))
 
 	return &pb.GetSupportTicketsResponse{
 		Success: true,
