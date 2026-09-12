@@ -38,7 +38,6 @@ func (h *UserHandler) NewTicket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeProtoJSON(w, http.StatusOK, res)
-
 }
 
 func (h *UserHandler) NewUser(w http.ResponseWriter, r *http.Request) {
@@ -59,7 +58,6 @@ func (h *UserHandler) NewUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeProtoJSON(w, http.StatusOK, res)
-
 }
 
 func (h *UserHandler) GetUserTickets(w http.ResponseWriter, r *http.Request) {
@@ -76,5 +74,4 @@ func (h *UserHandler) GetUserTickets(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeProtoJSON(w, http.StatusOK, res)
-
 }

@@ -2,9 +2,9 @@ package handlers
 
 import (
 	"context"
-	"ticket_service/internal/handlers/transformers"
 	pb "ticket_service/internal/protos"
 	"ticket_service/internal/services"
+	"ticket_service/internal/transformers"
 )
 
 type TicketHandler struct {

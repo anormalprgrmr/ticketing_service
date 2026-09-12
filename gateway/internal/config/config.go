@@ -4,7 +4,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -17,9 +16,9 @@ type Config struct {
 
 func NewConfig() (*Config, error) {
 	logLevelStr := os.Getenv("LOG_LEVEL")
-	logLevel, err := logrus.ParseLevel(logLevelStr)
+	logLevel, err := log.ParseLevel(logLevelStr)
 	if err != nil {
-		logLevel = logrus.DebugLevel
+		logLevel = log.DebugLevel
 	}
 
 	remoteHost := os.Getenv("TICKET-HOST")

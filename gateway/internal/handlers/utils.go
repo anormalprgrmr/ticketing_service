@@ -23,7 +23,6 @@ func writeProtoJSON(w http.ResponseWriter, status int, msg proto.Message) {
 
 	w.WriteHeader(status)
 	_, _ = w.Write(data)
-
 }
 
 func writeGRPCError(w http.ResponseWriter, err error) {

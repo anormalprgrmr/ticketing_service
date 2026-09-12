@@ -38,10 +38,10 @@ func (h *SupportHandler) NewSupport(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeProtoJSON(w, http.StatusOK, res)
-
 }
 
 func (h *SupportHandler) GetSupportTickets(w http.ResponseWriter, r *http.Request) {
+
 	ctx, cancel := context.WithTimeout(r.Context(), 2*time.Second)
 	defer cancel()
 
@@ -75,7 +75,6 @@ func (h *SupportHandler) CloseTicket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeProtoJSON(w, http.StatusOK, res)
-
 }
 
 func (h *SupportHandler) AnswerTicket(w http.ResponseWriter, r *http.Request) {
@@ -96,5 +95,4 @@ func (h *SupportHandler) AnswerTicket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeProtoJSON(w, http.StatusOK, res)
-
 }

@@ -29,7 +29,9 @@ func setupTestDB(t *testing.T) (*sqlx.DB, sqlmock.Sqlmock) {
 }
 
 func newScheduler(db *sqlx.DB) *TicketScheduler {
-	return NewTicketScheduler(db, nil)
+	ts, _ := NewTicketScheduler(context.Background(), db, nil)
+
+	return ts
 }
 
 func TestUpdateScheduler_AssignsTicketToSupport(t *testing.T) {
@@ -600,11 +602,13 @@ func TestSyncAll_ReturnsError(t *testing.T) {
 func TestNewTicketScheduler(t *testing.T) {
 	db, _ := setupTestDB(t)
 
-	scheduler := NewTicketScheduler(
+	scheduler, err := NewTicketScheduler(
+		context.Background(),
 		db,
 		nil,
 	)
 
+	require.Nil(t, err)
 	require.NotNil(t, scheduler)
 	require.Equal(t, db, scheduler.dbConn)
 	require.Nil(t, scheduler.eb)

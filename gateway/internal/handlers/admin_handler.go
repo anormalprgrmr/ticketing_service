@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	pb "gateway/internal/protos"
-	"log"
 	"net/http"
 	"time"
 
+	log "github.com/sirupsen/logrus"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
@@ -53,7 +53,6 @@ func (h *AdminHandler) NewSupport(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Write(resByte)
-
 }
 
 func (h *AdminHandler) GetTicketsWithStatus(w http.ResponseWriter, r *http.Request) {
@@ -85,7 +84,6 @@ func (h *AdminHandler) GetTicketsWithStatus(w http.ResponseWriter, r *http.Reque
 	}
 
 	writeProtoJSON(w, http.StatusOK, res)
-
 }
 
 func (h *AdminHandler) TransferTicket(w http.ResponseWriter, r *http.Request) {
@@ -108,5 +106,4 @@ func (h *AdminHandler) TransferTicket(w http.ResponseWriter, r *http.Request) {
 	}
 
 	writeProtoJSON(w, http.StatusOK, res)
-
 }

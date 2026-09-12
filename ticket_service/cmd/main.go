@@ -31,17 +31,21 @@ func main() {
 		log.Fatalf("cant init logger : %e", err)
 	}
 
-	dbConn := db.ConnectDB(cfg.DBHost, cfg.DBPort, cfg.DBUser, cfg.DBPassword, cfg.DBName)
+	dbConn, err := db.ConnectDB(cfg.DBHost, cfg.DBPort, cfg.DBUser, cfg.DBPassword, cfg.DBName)
+	if err != nil {
+		log.Fatalf("cant connect to DB : %e", err)
+	}
 
 	eb := event.NewChannelSignalBus()
 
-	ts := ticketscheduler.NewTicketScheduler(dbConn, eb)
-
-	err = ts.Start(ctx)
+	_, err = ticketscheduler.NewTicketScheduler(ctx, dbConn, eb)
 	if err != nil {
 		log.Fatalf("couldnt start tickerScheduler : %e", err)
 	}
 
 	err = grpcserver.StartgRPCServer(cfg.Port, dbConn, eb)
+	if err != nil {
+		log.Fatalf("couldnt start gRPC server : %e", err)
+	}
 
 }

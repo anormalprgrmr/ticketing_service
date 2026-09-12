@@ -20,16 +20,23 @@ type TicketScheduler struct {
 	eb          event.EventSignalBus
 }
 
-func NewTicketScheduler(dbConn *sqlx.DB, eb event.EventSignalBus) *TicketScheduler {
-	return &TicketScheduler{
+func NewTicketScheduler(ctx context.Context, dbConn *sqlx.DB, eb event.EventSignalBus) (*TicketScheduler, error) {
+	ts := &TicketScheduler{
 		mutex:       sync.Mutex{},
 		ticketQueue: Queue[models.Ticket]{},
 		dbConn:      dbConn,
 		eb:          eb,
 	}
+
+	err := ts.start(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return ts, nil
 }
 
-func (ts *TicketScheduler) Start(ctx context.Context) error {
+func (ts *TicketScheduler) start(ctx context.Context) error {
 	// Recover all existing/unprocessed work first.
 	if err := ts.syncAll(ctx); err != nil {
 		return err

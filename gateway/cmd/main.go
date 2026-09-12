@@ -9,6 +9,7 @@ import (
 
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
@@ -23,7 +24,7 @@ func main() {
 		log.Fatalf("cant create logger instance : %e", err)
 	}
 
-	conn, err := grpc.NewClient(fmt.Sprintf("%s:%d", cfg.RemoteHost, cfg.RemotePort), grpc.WithInsecure())
+	conn, err := grpc.NewClient(fmt.Sprintf("%s:%d", cfg.RemoteHost, cfg.RemotePort), grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatalf("cant connect to gRPC server :%v", err)
 	}

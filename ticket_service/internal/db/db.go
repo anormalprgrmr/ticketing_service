@@ -5,10 +5,9 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	log "github.com/sirupsen/logrus"
 )
 
-func ConnectDB(host string, port int, user, password, dbname string) *sqlx.DB {
+func ConnectDB(host string, port int, user, password, dbname string) (*sqlx.DB, error) {
 
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
@@ -16,7 +15,7 @@ func ConnectDB(host string, port int, user, password, dbname string) *sqlx.DB {
 
 	db, err := sqlx.Open("postgres", psqlInfo)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	db.SetMaxOpenConns(50)
@@ -24,9 +23,8 @@ func ConnectDB(host string, port int, user, password, dbname string) *sqlx.DB {
 
 	err = db.Ping()
 	if err != nil {
-		log.Error("cant ping db: ", err)
-		panic(err)
+		return nil, err
 	}
 
-	return db
+	return db, nil
 }

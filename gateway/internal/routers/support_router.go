@@ -7,14 +7,13 @@ import (
 )
 
 func NewSupportRouter(supportHandler *handlers.SupportHandler) *chi.Mux {
-
 	r := chi.NewRouter()
 
 	r.Post("/answerTicket", supportHandler.NewSupport)
 	r.Post("/closeTicket", supportHandler.CloseTicket)
 	r.Post("/answerTicket", supportHandler.AnswerTicket)
 
-	r.Get("/{userID}/myTickets", supportHandler.GetSupportTickets)
+	r.Get("/{supportID}/myTickets", supportHandler.GetSupportTickets)
 
 	return r
 }

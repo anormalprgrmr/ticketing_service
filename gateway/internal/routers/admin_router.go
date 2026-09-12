@@ -7,7 +7,6 @@ import (
 )
 
 func NewAdminRouter(adminHandler *handlers.AdminHandler) *chi.Mux {
-
 	r := chi.NewRouter()
 
 	r.Post("/newSupport", adminHandler.NewSupport)

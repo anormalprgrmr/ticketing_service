@@ -5,12 +5,11 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
-func InitLogger(logLevel logrus.Level) error {
+func InitLogger(logLevel log.Level) error {
 	logDir := "/tmp/newcash/gateway"
 
 	if err := os.MkdirAll(logDir, 0755); err != nil {

@@ -2,9 +2,11 @@ package handlers
 
 import (
 	"context"
-	"ticket_service/internal/handlers/transformers"
 	pb "ticket_service/internal/protos"
 	"ticket_service/internal/services"
+	"ticket_service/internal/transformers"
+
+	"github.com/sirupsen/logrus"
 )
 
 type SupportHandler struct {
@@ -47,10 +49,13 @@ func (h *SupportHandler) GetSupportTickets(ctx context.Context, req *pb.GetSuppo
 		}, err
 	}
 
+	logrus.Infof("grpc : %v", tickets)
+	logrus.Infof("model : %v", transformers.TicketModelToGRPC(tickets))
+
 	return &pb.GetSupportTicketsResponse{
 		Success: true,
 		Error:   "",
-		Tickets: nil,
+		Tickets: transformers.TicketModelToGRPC(tickets),
 	}, nil
 
 }

@@ -39,3 +39,6 @@ tasks:
   proto:
     desc: generate pb files
     cmd: ./internal/protos/generate.sh
+  lint:
+    desc: run golang linter
+    cmd: golangci-lint run
