@@ -7,7 +7,7 @@ import (
 
 func TicketModelToGRPC(tickets []models.Ticket) []*pb.Ticket {
 
-	pbTickets := make([]*pb.Ticket, len(tickets))
+	pbTickets := make([]*pb.Ticket, 0)
 
 	for _, ticket := range tickets {
 		pbTickets = append(pbTickets, &pb.Ticket{
